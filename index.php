@@ -14,8 +14,9 @@ $tomorrow = strtotime('tomorrow midnight');
 $now = strtotime('now');
 // далее нужно вычислить оставшееся время до начала следующих суток и записать его в переменную $lot_time_remaining
 $remainingTime = $tomorrow - $now;
-$date = date("G.i", $remainingTime);
-$lot_time_remaining = $date;
+$hours = floor($remainingTime / 3600);
+$minutes = date("i", $remainingTime);
+$lot_time_remaining = $hours . ":" . $minutes;
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -114,7 +115,6 @@ $lot_time_remaining = $date;
                         </div>
                         <div class="lot__timer timer">
                             <?=$lot_time_remaining;?>
-                        </div>
                     </div>
                 </div>
             </li>
