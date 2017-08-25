@@ -16,7 +16,7 @@ $now = strtotime('now');
 $remainingTime = $tomorrow - $now;
 $hours = floor($remainingTime / 3600);
 $minutes =  floor(($remainingTime % 3600) / 60);
-$lot_time_remaining = $hours . ":" . $minutes;
+$lot_time_remaining = $lot_time_remaining = sprintf('%02d:%02d',$hours,$minutes);
 ?>
 <!DOCTYPE html>
 <html lang="ru">
