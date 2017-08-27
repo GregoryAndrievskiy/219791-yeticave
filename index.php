@@ -11,7 +11,7 @@ $lot_time_remaining = "00:00";
 // временная метка для полночи следующего дня
 $tomorrow = strtotime('tomorrow midnight');
 // временная метка для настоящего времени
-$now = strtotime('now');
+$now = time();
 // далее нужно вычислить оставшееся время до начала следующих суток и записать его в переменную $lot_time_remaining
 $remainingTime = $tomorrow - $now;
 $hours = floor($remainingTime / 3600);
@@ -143,7 +143,7 @@ $lots = [
                 </div>
                 <div class="lot__info">
                     <span class="lot__category"><?=$value['category']; ?></span>
-                    <h3 class="lot__title"><a class="text-link" href="lot.html"><?=$value['name']; ?></a></h3>
+                    <h3 class="lot__title"><a class="text-link" href="lot.php"><?=$value['name']; ?></a></h3>
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
