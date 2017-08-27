@@ -11,7 +11,7 @@ $lot_time_remaining = "00:00";
 // временная метка для полночи следующего дня
 $tomorrow = strtotime('tomorrow midnight');
 // временная метка для настоящего времени
-$now = strtotime('now');
+$now = time();
 // далее нужно вычислить оставшееся время до начала следующих суток и записать его в переменную $lot_time_remaining
 $remainingTime = $tomorrow - $now;
 $hours = floor($remainingTime / 3600);

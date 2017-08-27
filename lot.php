@@ -8,19 +8,16 @@ $bets = [
     ['name' => 'Семён', 'price' => 10000, 'ts' => strtotime('last week')]
 ];
 $timeManagement = function ($timeStamp) {
-	$now = strtotime('now');
+	$now = time();
 	$passedTime = $now - $timeStamp;
 	$hours = floor($passedTime / 3600);
-	$minutes =  floor(($passedTime % 3600) / 60);
 	$time;
 	if ($hours >= 24) {
-		$time = date("d.m.y", $timeStamp) . ' в ' . date("H:i", $timeStamp);
-	}
-	if ($hours < 24 && $hours >= 1) {
-		$time = date("g", $timeStamp) . ' часов назад';
-	}
-	if ($hours < 1) {
-		$time = date("i", $timeStamp) . ' минут назад';
+		$time = date("d.m.y в H:i", $timeStamp);
+	} elseif ($hours >= 1) {
+		$time = $hours . ' часов назад';
+	} else {
+		$time = floor(($passedTime % 3600) / 60) . ' минут назад';
 	}
 	return $time;
 };
