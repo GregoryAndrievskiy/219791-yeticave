@@ -14,5 +14,4 @@
         'content' => $content
     ];
     print(renderTemplate('templates/layout.php', $layout_data));
-		print($categories);
 ?>
