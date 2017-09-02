@@ -1,7 +1,7 @@
 ﻿<?php
     $page_title = $templateData['title'];
-    $user_avatar = $templateData['avatar'];
-    $user_name = $templateData['user'];
+    $user_avatar = 'img/user.jpg';
+    $user_name = 'Константин';
     $page_content = $templateData['content'];
 	$is_auth = (bool) rand(0, 1);
 ?>
