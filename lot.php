@@ -48,6 +48,7 @@ if ($lots[$id]) {
 	print(renderTemplate('templates/layout.php', $lot_data));
 } else {
 	if($_GET['id'] != null) {
+		header("HTTP/1.0 404 Not Found");
 		print('404');
 	}
 }
