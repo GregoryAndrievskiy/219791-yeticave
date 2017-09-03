@@ -1,7 +1,7 @@
 ﻿<?php
     $page_title = $templateData['title'];
-    $user_avatar = $templateData['avatar'];
-    $user_name = $templateData['user'];
+    $user_avatar = 'img/user.jpg';
+    $user_name = 'Константин';
     $page_content = $templateData['content'];
 	$is_auth = (bool) rand(0, 1);
 ?>
@@ -17,7 +17,7 @@
 <header class="main-header">
     <div class="main-header__container container">
         <h1 class="visually-hidden">YetiCave</h1>
-        <a class="main-header__logo">
+        <a class="main-header__logo" href="index.php">
             <img src="img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
         </a>
         <form class="main-header__search" method="get" action="https://echo.htmlacademy.ru">
