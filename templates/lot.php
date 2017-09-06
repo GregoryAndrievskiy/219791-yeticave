@@ -59,14 +59,14 @@ if ($templateData['description']) {
 	</ul>
 	</nav>
 	<section class="lot-item container">
-		<h2><?=$lot_name;?></h2>
+		<h2><?=htmlspecialchars($lot_name);?></h2>
 		<div class="lot-item__content">
 			<div class="lot-item__left">
 				<div class="lot-item__image">
-					<img src="<?=$lot_url;?>" width="730" height="548" alt="<?=$lot_category;?>">
+					<img src="<?=$lot_url;?>" width="730" height="548" alt="<?=htmlspecialchars($lot_category);?>">
 				</div>
-				<p class="lot-item__category">Категория: <span><?=$lot_category;?></span></p>
-				<p class="lot-item__description"><?=$lot_description;?></p>
+				<p class="lot-item__category">Категория: <span><?=htmlspecialchars($lot_category);?></span></p>
+				<p class="lot-item__description"><?=htmlspecialchars($lot_description);?></p>
 			</div>
 			<div class="lot-item__right">
 				<div class="lot-item__state">
