@@ -24,8 +24,7 @@
             <input type="search" name="search" placeholder="Поиск лота">
             <input class="main-header__search-btn" type="submit" name="find" value="Найти">
         </form>
-        <a class="main-header__add-lot button" href="add-lot.html">Добавить лот</a>
-
+        <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
         <nav class="user-menu">
 			<? if($is_auth == true): ?>
 				<div class="user-menu__image">
@@ -47,9 +46,7 @@
         </nav>
     </div>
 </header>
-<main class="container">
-	<?php print($page_content); ?>
-</main>
+<?php print($page_content); ?>
 <footer class="main-footer">
     <nav class="nav">
         <ul class="nav__list container">

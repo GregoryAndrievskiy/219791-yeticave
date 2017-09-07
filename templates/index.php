@@ -3,6 +3,7 @@
 	$categorie = $templateData['categorie'];
 	$time_remaining = $templateData['time'];
 ?>
+<main class="container">
 	<section class="promo">
         <h2 class="promo__title">Нужен стафф для катки?</h2>
         <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
@@ -31,9 +32,9 @@
         <div class="lots__header">
             <h2>Открытые лоты</h2>
             <select class="lots__select">
-				<?php foreach ($categorie as $key => $value) : ?>
-					<option><?=htmlspecialchars($value);?></option>
-				<?php endforeach; ?>
+				<? foreach ($categorie as $key => $value) : ?>
+					<option><?=htmlspecialchars($value); ?></option>
+				<? endforeach; ?>
             </select>
         </div>
         <ul class="lots__list">
@@ -56,6 +57,7 @@
                     </div>
                 </div>
             </li>
-			<?php endforeach; ?>
+		<? endforeach; ?>
         </ul>
     </section>
+</main>
