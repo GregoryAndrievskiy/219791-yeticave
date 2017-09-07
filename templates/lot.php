@@ -25,6 +25,7 @@ $lot_price = $templateData['price'];
 $lot_name = $templateData['name'];
 $lot_url = $templateData['url'];
 $lot_category = $templateData['category'];
+$lot_step = $templateData['step'];
 if ($templateData['description']) {
 	$lot_description = $templateData['description'];
 	} else {
@@ -79,7 +80,7 @@ if ($templateData['description']) {
 							<span class="lot-item__cost"><?=$lot_price;?></span>
 						</div>
 						<div class="lot-item__min-cost">
-							Мин. ставка <span>11 000 р</span>
+							Мин. ставка <span><?=$lot_price + $lot_step;?> р</span>
 						</div>
 					</div>
 					<form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post">

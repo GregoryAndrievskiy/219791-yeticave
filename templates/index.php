@@ -32,9 +32,9 @@
         <div class="lots__header">
             <h2>Открытые лоты</h2>
             <select class="lots__select">
-				<?php foreach ($categorie as $key => $value) : ?>
-					<option><?=htmlspecialchars($value);?></option>
-				<?php endforeach; ?>
+				<? foreach ($categorie as $key => $value) : ?>
+					<option><?=htmlspecialchars($value); ?></option>
+				<? endforeach; ?>
             </select>
         </div>
         <ul class="lots__list">
@@ -57,7 +57,7 @@
                     </div>
                 </div>
             </li>
-			<?php endforeach; ?>
+		<? endforeach; ?>
         </ul>
     </section>
 </main>
