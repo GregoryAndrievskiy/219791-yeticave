@@ -1,35 +1,27 @@
 <?php
 require_once 'functions.php';
-$valid_list = [
-	'lot-name' => true,
-	'lot-category' => true,
-	'lot-message' => true,
-	'lot-photo' => true,
-	'lot-rate' => true,
-	'lot-step' => true,
-	'lot-date' => true
-];
+$valid_list = ['lot-name', 'lot-category', 'lot-message', 'lot-rate', 'lot-step', 'lot-date'];
 $error_list = [];
 if (!empty($_POST)) {
 	foreach ($valid_list as $key => $value) {
-		if(!$_POST[$key]) {
-			if ($key !== 'lot-photo') $error_list[] = $key;
-		} elseif ($key === 'lot-rate' || $key === 'lot-step') {
-			if (!is_numeric($_POST[$key])) $error_list[] = $key;
-		} elseif ($key === 'lot-category') {
-			if ($_POST[$key] === 'Выберите категорию') $error_list[] = $key;
+		if(!$_POST[$value]) {
+			if ($value !== 'lot-category') $error_list[] = $value;
+		} elseif ($value === 'lot-rate' || $value === 'lot-step') {
+			if (!is_numeric($_POST[$value])) $error_list[] = $value;
+		} elseif ($value === 'lot-category') {
+			if (!array_key_exists($_POST[$value],$categories)) $error_list[] = $value;
+		} elseif ($value === 'lot-date') {
+			if ($_POST[$value] !== date('d.m.Y',strtotime($_POST[$value]))) $error_list[] = $value;
 		}; 
-		if ($key === 'lot-photo') {
-			$file_info = finfo_open(FILEINFO_MIME_TYPE);
-			$file_name = $_FILES[$key]['tmp_name'];
-			if ($file_name) {
-				$valid_img_types = ['image/jpeg','image/png'];
-				$file_type = finfo_file($file_info, $file_name);
-				if (!in_array($file_type, $valid_img_types)) $error_list[] = $key;
-			} else {
-				$error_list[] = $key;
-			};
-		}; 
+	};
+	$file_info = finfo_open(FILEINFO_MIME_TYPE);
+	$file_name = $_FILES['lot-photo']['tmp_name'];
+	if ($file_name) {
+		$valid_img_types = ['image/jpeg','image/png'];
+		$file_type = finfo_file($file_info, $file_name);
+		if (!in_array($file_type, $valid_img_types)) $error_list[] = 'lot-photo';
+	} else {
+		$error_list[] = 'lot-photo';
 	};
 	if (empty($error_list)) {
 		$file_name = $_POST['lot-date'] . $_POST['lot-rate'] . $_POST['lot-step'];
@@ -41,8 +33,9 @@ if (!empty($_POST)) {
 			'name' => $_POST['lot-name'],
 			'url' => $file_url,
 			'step' => $_POST['lot-step'],
-			'category' => $_POST['lot-category'],
+			'category' => $categories[$_POST['lot-category']],
 			'description' => $_POST['lot-message'],
+			'categories' => $categories
 		];
 		$content = renderTemplate('templates/lot.php', $form_data);
 		$layout_data = [

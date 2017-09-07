@@ -40,12 +40,19 @@ $lots = [
 ];
 $id = $_GET['id'];
 if ($lots[$id]) {
-	$content = renderTemplate('templates/lot.php', $lots[$id]);
 	$lot_data = [
-		'title' => $lots[$id]['name'],
+		'name' => $lots[$id]['name'],
+		'category' => $lots[$id]['category'],
+		'price' => $lots[$id]['price'],
+		'url' => $lots[$id]['url'],
+		'categories' => $categories
+	];
+	$content = renderTemplate('templates/lot.php', $lot_data);
+	$layout_data = [
+		'title' => $lot_data['name'],
         'content' => $content
 	];
-	print(renderTemplate('templates/layout.php', $lot_data));
+	print(renderTemplate('templates/layout.php', $layout_data));
 } else {
 	if($_GET['id'] != null) {
 		header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");

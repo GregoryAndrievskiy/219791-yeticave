@@ -21,6 +21,7 @@ $timeManagement = function ($timeStamp) {
 	}
 	return $time;
 };
+$categories = $templateData['categories'];
 $lot_price = $templateData['price'];
 $lot_name = $templateData['name'];
 $lot_url = $templateData['url'];
@@ -39,24 +40,11 @@ if ($templateData['description']) {
 <main>
 	<nav class="nav">
 	<ul class="nav__list container">
-	  <li class="nav__item">
-		<a href="all-lots.html">Доски и лыжи</a>
-	  </li>
-	  <li class="nav__item">
-		<a href="all-lots.html">Крепления</a>
-	  </li>
-	  <li class="nav__item">
-		<a href="all-lots.html">Ботинки</a>
-	  </li>
-	  <li class="nav__item">
-		<a href="all-lots.html">Одежда</a>
-	  </li>
-	  <li class="nav__item">
-		<a href="all-lots.html">Инструменты</a>
-	  </li>
-	  <li class="nav__item">
-		<a href="all-lots.html">Разное</a>
-	  </li>
+		<? foreach ($categories as $key => $value) : ?>
+			<li class="nav__item">
+				<a href="all-lots.html"><?=$value;?></a>
+			</li>
+		<? endforeach ?>
 	</ul>
 	</nav>
 	<section class="lot-item container">
