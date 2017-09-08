@@ -1,9 +1,11 @@
 <?php
+
 $errors = $templateData['errors'];
 $categories = $templateData['categories'];
 $default_error_text = 'Заполните это поле';
 $numeric_error_text = 'Введите число';
 $default_error_class = 'form__item--invalid';
+
 ?>
 <main>
   <nav class="nav">
