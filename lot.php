@@ -4,6 +4,7 @@ session_start();
 
 require_once 'functions.php';
 
+
 $lots = [
     [
         'name' => '2014 Rossignol District Snowboard',
@@ -44,25 +45,79 @@ $lots = [
 ];
 
 $id = $_GET['id'];
+$bets;
 
 if ($lots[$id]) {
+	
+	$errors = [];
+	$bet = $_POST['new-bet'];
+	$price = $lots[$id]['price'];
+	
+	if (isset($_COOKIE['bets'])) {
+
+        $bets = json_decode($_COOKIE['bets'], true);
+        
+        foreach ($bets as $bet_item) {
+
+			if ($bet_item['id'] === $id) {
+
+				$errors[] = 'bet-done';
+
+			};
+        };
+    };
+	
+	if (!empty($bet)) {
+
+		if ($bet < ($price + $_POST['step'])) {
+
+			$errors[] = 'low-bet';
+
+		} else {
+
+			$expire_date = strtotime('tomorrow midnight');
+			$price = $bet;
+			$bets[] = [
+				'id' => $id, 
+				'name' => $lots[$id]['name'],
+				'url' => $lots[$id]['url'],
+				'category' => $lots[$id]['category'],
+				'date' => strtotime('now'), 
+				'price' => $price,
+				'expire' => $expire_date
+			];
+			$errors[] = 'bet-done';
+			setcookie('bets', json_encode($bets), $expire_date, '/');
+			header("Location: /mylots.php");
+
+		};
+	};
+
 	$lot_data = [
 		'name' => $lots[$id]['name'],
 		'category' => $lots[$id]['category'],
-		'price' => $lots[$id]['price'],
+		'price' => $price,
 		'url' => $lots[$id]['url'],
-		'categories' => $categories
+		'categories' => $categories,
+		'errors' => $errors
 	];
+
 	$content = renderTemplate('templates/lot.php', $lot_data);
+
 	$layout_data = [
 		'title' => $lot_data['name'],
         'content' => $content
 	];
+
 	print(renderTemplate('templates/layout.php', $layout_data));
+
 } else {
+
 	if($_GET['id'] != null) {
+
 		header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
 		print('404');
-	}
-}
+
+	};
+};
 ?>

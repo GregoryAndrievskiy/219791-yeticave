@@ -1,6 +1,8 @@
 <?php
 
 // ставки пользователей, которыми надо заполнить таблицу
+$id = $_GET['id'];
+
 $bets = [
     ['name' => 'Иван', 'price' => 11500, 'ts' => strtotime('-' . rand(1, 50) .' minute')],
     ['name' => 'Константин', 'price' => 11000, 'ts' => strtotime('-' . rand(1, 18) .' hour')],
@@ -21,20 +23,29 @@ $timeManagement = function ($timeStamp) {
 	}
 	return $time;
 };
+
+$default_error_class = 'form__item--invalid';
+
 $categories = $templateData['categories'];
 $lot_price = $templateData['price'];
 $lot_name = $templateData['name'];
 $lot_url = $templateData['url'];
 $lot_category = $templateData['category'];
 $lot_step = $templateData['step'];
+$errors = $templateData['errors'];
+
 if ($templateData['description']) {
+
 	$lot_description = $templateData['description'];
+
 	} else {
+
 	$lot_description = 'Легкий маневренный сноуборд, готовый дать жару в любом парке, растопив снег
 					мощным щелчкоми четкими дугами. Стекловолокно Bi-Ax, уложенное в двух направлениях, наделяет этот
 					снаряд отличной гибкостью и отзывчивостью, а симметричная геометрия в сочетании с классическим прогибом
 					кэмбер позволит уверенно держать высокие скорости. А если к концу катального дня сил совсем не останется,
 					просто посмотрите на Вашу доску и улыбнитесь, крутая графика от Шона Кливера еще никого не оставляла равнодушным.';
+
 };
 ?>
 <main>
@@ -71,11 +82,11 @@ if ($templateData['description']) {
 							Мин. ставка <span><?=$lot_price + $lot_step;?> р</span>
 						</div>
 					</div>
-					<? if(isset($_SESSION['user'])): ?>
-						<form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post">
-							<p class="lot-item__form-item">
+					<? if(isset($_SESSION['user']) && !in_array('bet-done',$errors)): ?>
+						<form class="lot-item__form" action="lot.php?id=<?=$id;?>" method="post">
+							<p class="lot-item__form-item <?=in_array('low-bet',$errors) ? $default_error_class : ''?>">
 								<label for="cost">Ваша ставка</label>
-								<input id="cost" type="number" name="cost" placeholder="12 000">
+								<input id="cost" name="new-bet" type="number" name="cost" placeholder="<?=$lot_price + $lot_step;?>" value="<?=$_POST['new-bet'];?>">
 							</p>
 							<button type="submit" class="button">Сделать ставку</button>
 						</form>

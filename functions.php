@@ -11,7 +11,7 @@ $now = time();
 $remainingTime = $tomorrow - $now;
 $hours = floor($remainingTime / 3600);
 $minutes =  floor(($remainingTime % 3600) / 60);
-$lot_time_remaining = $lot_time_remaining = sprintf('%02d:%02d',$hours,$minutes);
+$lot_time_remaining = sprintf('%02d:%02d',$hours,$minutes);
 
 $categories = ['Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'];
 
@@ -26,12 +26,14 @@ function renderTemplate($templatePath, $templateData) {
 
     }
     return '';
-}
+};
 
 function searchUserByEmail($email, $users) {
+
 	$result = null;
 
 	foreach ($users as $user) {
+
 		if ($user['email'] == $email) {
 
 			$result = $user;
@@ -39,5 +41,5 @@ function searchUserByEmail($email, $users) {
 		}
 	}
 	return $result;
-}
+};
 ?>
