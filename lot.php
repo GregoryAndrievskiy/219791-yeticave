@@ -1,5 +1,9 @@
 <?php
+
+session_start();
+
 require_once 'functions.php';
+
 $lots = [
     [
         'name' => '2014 Rossignol District Snowboard',
@@ -38,7 +42,9 @@ $lots = [
         'url' => 'img/lot-6.jpg'
     ]
 ];
+
 $id = $_GET['id'];
+
 if ($lots[$id]) {
 	$lot_data = [
 		'name' => $lots[$id]['name'],
