@@ -3,12 +3,14 @@
 session_start();
 
 require_once 'functions.php';
-require_once 'lot.php';
+
+$tomorrow = strtotime('tomorrow midnight');
+$time = timeRemaining($tomorrow);
 
 $index_data = [
 	'lot' => $lots, 
 	'categorie' => $categories,
-	'time' => $lot_time_remaining
+	'time' => $time 
 ];
 
 $content = renderTemplate('templates/index.php', $index_data );

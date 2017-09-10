@@ -3,13 +3,6 @@
 session_start();
 
 require_once 'functions.php';
-require_once 'lot.php';
-
-  if (isset($_SESSION['user'])) {
-
-	$user = $_SESSION['user'];
-
-  };
   
   if (isset($_COOKIE['bets'])) {
 
