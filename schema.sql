@@ -4,69 +4,54 @@ USE yeticave;
 
 CREATE TABLE category (
 	id 						INT AUTO_INCREMENT PRIMARY KEY,
-	category 				CHAR(13)
+	name					CHAR(13)
 );
 
-CREATE UNIQUE INDEX category ON category(id);
+CREATE INDEX category_name ON categories(name);
 
 CREATE TABLE lot (
 	id						INT AUTO_INCREMENT PRIMARY KEY,
-	date_of_create			DATETIME,
+	create_date				DATETIME,
 	name					CHAR(128),
 	description				TEXT,
 	img_url					CHAR(64),
 	start_price				INT,
-	date_of_expire			DATETIME,
+	expire_date				DATETIME,
 	bet_step				INT,
 	number_of_favorite 		INT,
 
-	author_link				INT,
-	winner_link				INT,
-	category_link			INT
+	author_id				INT,
+	winner_id				INT,
+	category_id				INT
 );
 
-CREATE INDEX author_link_user ON user(id);
-CREATE INDEX winner_link_user ON user(id);
-CREATE INDEX category_link_category ON category(id);
-
 CREATE INDEX lot_name ON lot(name);
-CREATE INDEX lot_price ON lot(start_price);
-CREATE INDEX lot_category ON lot(category_link);
-
-CREATE UNIQUE INDEX lot ON lot(id);
-CREATE UNIQUE INDEX lot_img ON lots(img_url);
+CREATE INDEX lot_category ON lot(category_id);
 
 CREATE TABLE bet (
 	id						INT AUTO_INCREMENT PRIMARY KEY,
-	date_of_bet				DATETIME,
-	bet_value				INT,
+	bet_date				DATETIME,
+	cost					INT,
 
-	user_link				INT,
-	lot_link				INT
+	user_id					INT,
+	lot_id					INT
 );
 
-CREATE INDEX user_link_user ON user(id);
-CREATE INDEX lot_link_lot ON lot(id);
-
-CREATE UNIQUE INDEX bet ON bet(id);
+CREATE INDEX bet_cost ON bet(cost);
 
 CREATE TABLE user (
 	id						INT AUTO_INCREMENT PRIMARY KEY,
-	date_of_registration	DATETIME,
+	registration_date		DATETIME,
 	email					CHAR(64),
 	name					CHAR(64),
 	password				CHAR(64),
 	avatar_url				CHAR(64),
-	contacts				CHAR(128),
+	contacts				TEXT,
 	
-	created_lots_link		INT,
-	bets_link				INT
+	created_lots_id			INT,
+	bets_id					INT
 );
-
-CREATE INDEX created_lots_link_lot ON lot(id);
-CREATE INDEX bets_link_bet ON bet(id);
 
 CREATE INDEX user_name ON user(name);
 
-CREATE UNIQUE INDEX user ON user(id);
-CREATE UNIQUE INDEX email ON users(email);
+CREATE UNIQUE INDEX user_email ON users(email);
