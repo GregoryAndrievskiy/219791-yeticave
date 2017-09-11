@@ -60,4 +60,4 @@ CREATE TABLE user (
 
 CREATE INDEX user_name ON user(name);
 
-CREATE UNIQUE INDEX user_email ON users(email);
+CREATE UNIQUE INDEX user_email ON user(email);
