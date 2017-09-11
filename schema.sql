@@ -26,7 +26,10 @@ CREATE TABLE lot (
 );
 
 CREATE INDEX lot_name ON lot(name);
-CREATE INDEX lot_category ON lot(category_id);
+
+CREATE INDEX lot_author_id ON user(author_id);
+CREATE INDEX lot_winner_id ON user(winner_id);
+CREATE INDEX lot_category_id ON category(category_id);
 
 CREATE TABLE bet (
 	id						INT AUTO_INCREMENT PRIMARY KEY,
@@ -38,6 +41,9 @@ CREATE TABLE bet (
 );
 
 CREATE INDEX bet_cost ON bet(cost);
+
+CREATE INDEX bet_user_id ON user(user_id);
+CREATE INDEX bet_lot_id ON lot(lot_id);
 
 CREATE TABLE user (
 	id						INT AUTO_INCREMENT PRIMARY KEY,
