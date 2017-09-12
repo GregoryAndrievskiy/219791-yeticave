@@ -7,7 +7,7 @@ CREATE TABLE category (
 	name					CHAR(13)
 );
 
-CREATE INDEX category_name ON category(name);
+CREATE UNIQUE INDEX category_name ON category(name);
 
 CREATE TABLE lot (
 	id						INT AUTO_INCREMENT PRIMARY KEY,
