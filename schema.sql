@@ -14,7 +14,7 @@ CREATE TABLE lot (
 	create_date				DATETIME,
 	name					CHAR(128),
 	description				TEXT,
-	img_url					CHAR(64),
+	img_url					CHAR(128),
 	start_price				INT,
 	expire_date				DATETIME,
 	bet_step				INT,
