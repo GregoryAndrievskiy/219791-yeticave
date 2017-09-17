@@ -4,6 +4,10 @@ session_start();
 
 require_once 'functions.php';
 
+require_once 'mysql_helper.php';
+
+require_once 'init.php';
+
 $valid_list = ['lot-name', 'lot-category', 'lot-message', 'lot-rate', 'lot-step', 'lot-date'];
 $error_list = [];
 
