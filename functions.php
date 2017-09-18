@@ -108,4 +108,69 @@ function searchUserByEmail($email, $users) {
 	}
 	return $result;
 };
+
+function select_data($con, $query, $data = []) {
+
+    $stmt = db_get_prepare_stmt($con, $query, $data);
+    $rows = [];
+
+	if ($stmt) {
+
+		$exe = mysqli_stmt_execute($stmt);
+
+		if($exe) {
+
+			$result = mysqli_stmt_get_result($stmt);
+
+		} if ($result) {
+
+			$rows = mysqli_fetch_array($result, MYSQLI_ASSOC));
+		}
+	}
+	return $rows;
+};
+
+function insert_data($con, $table, $data = []) {
+
+    $keys = [];
+    $values = [];
+
+    foreach ($data as $key => $value) {
+
+        $keys[] = $key;
+        $values[] = $value;
+    }
+
+    $query = 'INSERT INTO' . $table . '( ' . $keys . ')' . ' VALUES (' . $values . ')';
+	
+	$stmt = db_get_prepare_stmt($con, $query, $data);
+    
+	if ($stmt) {
+		
+		$exe =  mysqli_stmt_execute($stmt);
+		
+		if($exe) {
+
+			return mysqli_stmt_insert_id($stmt);
+		}
+    }
+	return false;
+};
+
+
+function exec_query($con, $query, $data = []) {
+
+    $stmt = db_get_prepare_stmt($con, $query, $data);
+
+    if ($stmt) {
+
+		$exe =  mysqli_stmt_execute($stmt);
+
+		if($exe) {
+
+			return true;
+		}
+    }
+    return $result;
+};
 ?>
