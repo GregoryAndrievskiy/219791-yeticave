@@ -24,6 +24,7 @@ if($con == false) {
 	exit();
 }
 
-//insert_data($con, 'user', ['email' => 'zzz@xxx.ru', 'name' => 'bbb777']);
+//$dddaaaa = insert_data($con, 'user', ['email' => 'zxxxxxx@wzcccccccccccz.ru', 'name' => 'zzz']);
+//echo $dddaaaa;
 
 ?>

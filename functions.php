@@ -155,7 +155,7 @@ function insert_data($con, $table, $data = []) {
 	if ($stmt) {
 		
 		$exe =  mysqli_stmt_execute($stmt);
-		
+
 		if($exe) {
 
 			return mysqli_stmt_insert_id($stmt);
