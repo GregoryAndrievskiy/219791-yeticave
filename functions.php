@@ -132,18 +132,20 @@ function select_data($con, $query, $data = []) {
 
 function insert_data($con, $table, $data = []) {
 
-    $keys = [];
+    $keys = '';
     $values = [];
+	$count = '';
 
     foreach ($data as $key => $value) {
 
-        $keys[] = $key;
+        $keys .= '$key, ';
         $values[] = $value;
+		$count .= '?, ';
     }
 
-    $query = 'INSERT INTO' . $table . '( ' . $keys . ')' . ' VALUES (' . $values . ')';
+    $query = 'INSERT INTO' . $table . '( ' . $keys . ')' . ' VALUES (' . $count . ')';
 	
-	$stmt = db_get_prepare_stmt($con, $query, $data);
+	$stmt = db_get_prepare_stmt($con, $query, $values);
     
 	if ($stmt) {
 		
