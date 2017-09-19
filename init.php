@@ -23,4 +23,7 @@ if($con == false) {
 	
 	exit();
 }
+
+//insert_data($con, 'user', ['email' => 'zzz@xxx.ru', 'name' => 'bbb777']);
+
 ?>

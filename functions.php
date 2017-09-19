@@ -124,7 +124,7 @@ function select_data($con, $query, $data = []) {
 
 		} if ($result) {
 
-			$rows = mysqli_fetch_array($result, MYSQLI_ASSOC));
+			$rows = mysqli_fetch_array($result, MYSQLI_ASSOC);
 		}
 	}
 	return $rows;
@@ -132,18 +132,23 @@ function select_data($con, $query, $data = []) {
 
 function insert_data($con, $table, $data = []) {
 
-    $keys = '';
+    $keys = [];
     $values = [];
-	$count = '';
+	$count = [];
 
     foreach ($data as $key => $value) {
 
-        $keys .= '$key, ';
+        $keys[] = $key;
         $values[] = $value;
-		$count .= '?, ';
+		$count[] = '?';
     }
+	
+	$keys_string = implode(',', $keys);
+	$count_string = implode(',', $count);
 
-    $query = 'INSERT INTO' . $table . '( ' . $keys . ')' . ' VALUES (' . $count . ')';
+    $query = 'INSERT INTO ' . $table . '( ' . $keys_string . ') VALUES (' . $count_string . ')';
+
+	//echo $query;
 	
 	$stmt = db_get_prepare_stmt($con, $query, $values);
     
@@ -175,4 +180,5 @@ function exec_query($con, $query, $data = []) {
     }
     return $result;
 };
+
 ?>
