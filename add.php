@@ -19,20 +19,31 @@ if (isset($_SESSION['user'])) {
 
 			if(!$_POST[$value]) {
 
-				if ($value !== 'lot-category') $error_list[] = $value;
+				if ($value !== 'lot-category') {
+					
+					$error_list[] = $value;
+					
+				}
 
 			} elseif ($value === 'lot-rate' || $value === 'lot-step') {
 
-				if (!is_numeric($_POST[$value])) $error_list[] = $value;
+				if (!is_numeric($_POST[$value])) {
+					
+					$error_list[] = $value;
+					
+				}
 
 			} elseif ($value === 'lot-category') {
 
-				if (!array_key_exists($_POST[$value],$categories)) $error_list[] = $value;
+				if (!array_key_exists(($_POST[$value] - 1),$select_data_categories)) {
+					$error_list[] = $value;
+				}
 
 			} elseif ($value === 'lot-date') {
 
-				if ($_POST[$value] !== date('d.m.Y',strtotime($_POST[$value]))) $error_list[] = $value;
-
+				if ($_POST[$value] !== date('d.m.Y',strtotime($_POST[$value]))) {
+					$error_list[] = $value;
+				}
 			}; 
 		};
 
@@ -44,7 +55,10 @@ if (isset($_SESSION['user'])) {
 			$valid_img_types = ['image/jpeg','image/png'];
 			$file_type = finfo_file($file_info, $file_name);
 
-			if (!in_array($file_type, $valid_img_types)) $error_list[] = 'lot-photo';
+			if (!in_array($file_type, $valid_img_types)) {
+				
+				$error_list[] = 'lot-photo';
+			}
 
 		} else {
 
@@ -59,35 +73,45 @@ if (isset($_SESSION['user'])) {
 			move_uploaded_file($_FILES['lot-photo']['tmp_name'], $file_path . $file_name);
 
 			$file_url = 'img/' . $file_name;
+			
+			$now = date('Y-m-d H:i:s', strtotime('now'));
 
-			$form_data = [
-				'price' => $_POST['lot-rate'],
+			$lot_data = [
+				'start_price' => $_POST['lot-rate'],
 				'name' => $_POST['lot-name'],
-				'url' => $file_url,
-				'step' => $_POST['lot-step'],
-				'category' => $categories[$_POST['lot-category']],
+				'img_url' => $file_url,
+				'bet_step' => $_POST['lot-step'],
+				'category_id' => $_POST['lot-category'],
+				'author_id' => $_SESSION['user']['id'],
 				'description' => $_POST['lot-message'],
-				'categories' => $categories
+				'expire_date' => $_POST['lot-date'],
+				'create_date' => $now
 			];
 
-			$content = renderTemplate('templates/lot.php', $form_data);
+			insert_data($con, 'lot', $lot_data);
+			
+			$lotQuery = 'SELECT 
+				id
+			FROM lot
+			WHERE author_id = ' . $_SESSION['user']['id'] . '
+			ORDER BY create_date DESC';
 
-			$layout_data = [
-				'title' => $form_data['name'],
-				'content' => $content
-			];
+			$my_last_lot_id = select_data($con, $lotQuery)[0]['id'];
+
+            header('Location: /lot.php?id=' . $my_last_lot_id);
 
 		} else {
 
 			$form_data = [
 				'errors' => $error_list,
-				'categories' => $categories
+				'categories' => $select_data_categories
 			];
 
 			$content = renderTemplate('templates/add.php', $form_data);
 
 			$layout_data = [
 				'title' => 'Добавление лота',
+				'categories' => $select_data_categories,
 				'content' => $content
 			];
 		}
@@ -95,13 +119,14 @@ if (isset($_SESSION['user'])) {
 
 		$form_data = [
 			'errors' => $error_list,
-			'categories' => $categories
+			'categories' => $select_data_categories
 		];
 
 		$content = renderTemplate('templates/add.php', $form_data);
 
 		$layout_data = [
 			'title' => 'Добавление лота',
+			'categories' => $select_data_categories,
 			'content' => $content
 		];
 	}

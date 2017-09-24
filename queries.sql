@@ -1,9 +1,27 @@
-INSERT INTO category SET name = 'Доски и лыжи';
-INSERT INTO category SET name = 'Крепления';
-INSERT INTO category SET name = 'Ботинки';
-INSERT INTO category SET name = 'Одежда';
-INSERT INTO category SET name = 'Инструменты';
-INSERT INTO category SET name = 'Разное';
+INSERT INTO category SET 
+	name = 'Доски и лыжи',
+	cssClass ='promo__item--boards';
+
+INSERT INTO category SET 
+	name = 'Крепления',
+	cssClass ='promo__item--attachment';
+
+INSERT INTO category SET 
+	name = 'Ботинки',
+	cssClass ='promo__item--boots';
+	
+INSERT INTO category SET 
+	name = 'Одежда',
+	cssClass ='promo__item--clothing';
+	
+INSERT INTO category SET 
+	name = 'Инструменты',
+	cssClass ='promo__item--tools';
+	
+INSERT INTO category SET 
+	name = 'Разное',
+	cssClass ='promo__item--other';
+
 
 INSERT INTO user SET
 	registration_date = '2017-09-11 00:00:00',
@@ -45,7 +63,7 @@ INSERT INTO lot SET
 INSERT INTO lot SET
 	create_date = '2017-09-12 09:00:00',
 	name = 'DC Ply Mens 2016/2017 Snowboard',
-	description = 'Ещё доска',
+	description = 'Легкий маневренный сноуборд, готовый дать жару в любом парке, растопив снег мощным щелчкоми четкими дугами. Стекловолокно Bi-Ax, уложенное в двух направлениях, наделяет этот снаряд отличной гибкостью и отзывчивостью, а симметричная геометрия в сочетании с классическим прогибом кэмбер позволит уверенно держать высокие скорости. А если к концу катального дня сил совсем не останется, просто посмотрите на Вашу доску и улыбнитесь, крутая графика от Шона Кливера еще никого не оставляла равнодушным.',
 	img_url = 'img/lot-2.jpg',
 	start_price = 15999,
 	expire_date = '2017-10-12 00:00:00',
@@ -122,7 +140,6 @@ INSERT INTO bet SET
 
 SELECT name FROM category;
 
-
 SELECT
 	name,
 	start_price,
@@ -135,15 +152,6 @@ LEFT JOIN bet ON bet.lot_id = lot.id
 WHERE lot.expire_date > NOW()
 GROUP BY lot.id
 ORDER BY lot.expire_date DESC;
-
-
-SELECT * FROM lot
-WHERE name = 'Крепления Union Contact Pro 2015 года размер L/XL' OR description LIKE 'Крепления';
-
-
-UPDATE lot SET name = 'Крепления Union Contact Pro 2017 года размер M'
-WHERE id = 1;
-
 
 SELECT * FROM bet
 WHERE lot_id = 1 ORDER BY bet_date DESC;

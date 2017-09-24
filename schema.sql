@@ -4,7 +4,8 @@ USE yeticave;
 
 CREATE TABLE category (
 	id 						INT AUTO_INCREMENT PRIMARY KEY,
-	name					CHAR(13)
+	name					CHAR(13),
+	cssClass				CHAR(32)
 );
 
 CREATE UNIQUE INDEX category_name ON category(name);

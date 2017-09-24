@@ -8,33 +8,28 @@ $default_error_class = 'form__item--invalid';
 
 $categories = $templateData['categories'];
 $bets = $templateData['bets'];
+$bets_number = $templateData['bets_number'];
 $lot_price = $templateData['price'];
 $lot_name = $templateData['name'];
 $lot_url = $templateData['url'];
 $lot_category = $templateData['category'];
+$lot_description = $templateData['description'];
 $lot_step = $templateData['step'];
+$lot_date = $templateData['expire_date'];
 $errors = $templateData['errors'];
 
-if ($templateData['description']) {
+if(!empty($bets)) {
 
-	$lot_description = $templateData['description'];
+	$lot_price = $bets[0]['bet_cost'];
 
-} else {
-
-	$lot_description = 'Легкий маневренный сноуборд, готовый дать жару в любом парке, растопив снег
-					мощным щелчкоми четкими дугами. Стекловолокно Bi-Ax, уложенное в двух направлениях, наделяет этот
-					снаряд отличной гибкостью и отзывчивостью, а симметричная геометрия в сочетании с классическим прогибом
-					кэмбер позволит уверенно держать высокие скорости. А если к концу катального дня сил совсем не останется,
-					просто посмотрите на Вашу доску и улыбнитесь, крутая графика от Шона Кливера еще никого не оставляла равнодушным.';
-
-};
+}
 ?>
 <main>
 	<nav class="nav">
 	<ul class="nav__list container">
 		<? foreach ($categories as $key => $value) : ?>
 			<li class="nav__item">
-				<a href="all-lots.html"><?=$value;?></a>
+				<a href="all-lots.html"><?=$value['name'];?></a>
 			</li>
 		<? endforeach ?>
 	</ul>
@@ -52,7 +47,7 @@ if ($templateData['description']) {
 			<div class="lot-item__right">
 				<div class="lot-item__state">
 					<div class="lot-item__timer timer">
-						10:54:12
+						<?=htmlspecialchars(timeRemaining($lot_date));?>
 					</div>
 					<div class="lot-item__cost-state">
 						<div class="lot-item__rate">
@@ -74,12 +69,12 @@ if ($templateData['description']) {
 					<? endif; ?>
 				</div>
 				<div class="history">
-					<h3>История ставок (<span><?=count($bets);?></span>)</h3>
+					<h3>История ставок (<span><?=!empty($bets_number) ? $bets_number : '0'?></span>)</h3>
 					<table class="history__list">
 						<?php foreach ($bets as $key => $value) : ?>
 							<tr class="history__item">
-								<td class="history__name"><?=$value['name'];?></td>
-								<td class="history__price"><?=$value['price'];?> р</td>
+								<td class="history__name"><?=$value['user_name'];?></td>
+								<td class="history__price"><?=$value['bet_cost'];?> р</td>
 								<td class="history__time"><?=timeManagement($value['ts']);?></td>
 							</tr>
 						<?php endforeach; ?>

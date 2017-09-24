@@ -12,7 +12,7 @@ $default_error_class = 'form__item--invalid';
     <ul class="nav__list container">
 		<? foreach ($categories as $key => $value) : ?>
 			<li class="nav__item">
-				<a href="all-lots.html"><?=$value;?></a>
+				<a href="all-lots.html"><?=$value['name'];?></a>
 			</li>
 		<? endforeach ?>
     </ul>
@@ -30,7 +30,7 @@ $default_error_class = 'form__item--invalid';
         <select id="category" name="lot-category" required>
 			<option value='' <?=empty($errors) ? 'selected' : ''?>>Выберите категорию</option>
 			<? foreach ($categories as $key => $value) : ?>
-				<option value="<?=$key;?>" <?=($_POST['lot-category'] == $key && !empty($errors)) ? 'selected' : ''?>><?=$value;?></option>
+				<option value="<?=$value['id'];?>" <?=($_POST['lot-category'] == $value['id'] && !empty($errors)) ? 'selected' : ''?>><?=$value['name'];?></option>
 			<? endforeach ?>
         </select>
         <span class="form__error"><?=in_array('lot-category',$errors) ? $default_error_text : ''?></span>

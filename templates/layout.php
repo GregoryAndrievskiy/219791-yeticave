@@ -3,6 +3,7 @@
     $page_title = $templateData['title'];
     $user_avatar = 'img/user.jpg';
     $page_content = $templateData['content'];
+	$categories = $templateData['categories'];
 
 ?>
 <!DOCTYPE html>
@@ -28,7 +29,7 @@
         <nav class="user-menu">
 			<? if(isset($_SESSION['user'])): ?>
 				<div class="user-menu__image">
-					<img src="<?=$user_avatar; ?>" width="40" height="40" alt="Пользователь">
+					<a href="mylots.php"><img src="<?=$_SESSION['user']['avatar_url']; ?>" width="40" height="40" alt="Пользователь"></a>
 				</div>
 				<div class="user-menu__logged">
 					<p><?=htmlspecialchars($_SESSION['user']['name']); ?></p>
@@ -37,7 +38,7 @@
 			<? else: ?>
 				<ul class="user-menu__list">
 					<li class="user-menu__item">
-						<a href="login.php">Регистрация</a>
+						<a href="sign-up.php">Регистрация</a>
 					</li>
 					<li class="user-menu__item">
 						<a href="login.php">Вход</a>
@@ -51,25 +52,12 @@
 <footer class="main-footer">
     <nav class="nav">
         <ul class="nav__list container">
-            <li class="nav__item">
-                <a href="all-lots.html">Доски и лыжи</a>
-            </li>
-            <li class="nav__item">
-                <a href="all-lots.html">Крепления</a>
-            </li>
-            <li class="nav__item">
-                <a href="all-lots.html">Ботинки</a>
-            </li>
-            <li class="nav__item">
-                <a href="all-lots.html">Одежда</a>
-            </li>
-            <li class="nav__item">
-                <a href="all-lots.html">Инструменты</a>
-            </li>
-            <li class="nav__item">
-                <a href="all-lots.html">Разное</a>
-            </li>
-        </ul>
+			<? foreach ($categories as $key => $value) : ?>
+				<li class="nav__item">
+					<a href="all-lots.html"><?=htmlspecialchars($value['name']); ?></a>
+				</li>
+			<? endforeach; ?>
+		</ul>
     </nav>
     <div class="main-footer__bottom container">
         <div class="main-footer__copyright">
