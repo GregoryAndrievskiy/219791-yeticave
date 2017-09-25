@@ -1,7 +1,10 @@
 ﻿<?php
 
-	$lot = $templateData['lot'];
+	$lot = $templateData['lots'];
 	$categories = $templateData['categories'];
+	$pages = $templateData['pages'];
+	$page_count = $templateData['page_count'];
+	$current_page = $templateData['current_page'];
 
 ?>
 <main class="container">
@@ -11,7 +14,7 @@
         <ul class="promo__list">
 			<? foreach ($categories as $key => $value) : ?>
 				<li class="promo__item <?=htmlspecialchars($value['cssClass']); ?>">
-					<a class="promo__link" href="all-lots.html"><?=htmlspecialchars($value['name']); ?></a>
+					<a class="promo__link" href="all-lots.php?<?= $value['id']; ?>"><?=htmlspecialchars($value['name']); ?></a>
 				</li>
 			<? endforeach; ?>
         </ul>
@@ -20,8 +23,9 @@
         <div class="lots__header">
             <h2>Открытые лоты</h2>
             <select class="lots__select">
+				<option value='0'>Все категории</option>
 				<? foreach ($categories as $key => $value) : ?>
-					<option><?=htmlspecialchars($value['name']); ?></option>
+					<option value="<?=$value['id'];?>"><?=htmlspecialchars($value['name']); ?></option>
 				<? endforeach; ?>
             </select>
         </div>
@@ -48,4 +52,15 @@
 		<? endforeach; ?>
         </ul>
     </section>
+	<? if ($page_count > 1) : ?>
+		<ul class="pagination-list">
+			<li class="pagination-item pagination-item-prev"><a>Назад</a></li>
+			<? foreach ($pages as $key) : ?>
+			<li class="pagination-item <?= ($key == $current_page) ? 'pagination-item-active' : '' ;?> ">
+				<a href="index.php?page=<?= $key; ?>"><?= $key; ?></a>
+			</li>
+			<? endforeach; ?>
+			<li class="pagination-item pagination-item-next"><a href="#">Вперед</a></li>
+		</ul>
+	<? endif; ?>
 </main>

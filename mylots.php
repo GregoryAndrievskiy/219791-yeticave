@@ -12,6 +12,8 @@ require_once 'init.php';
 $bets = [];
 
 if (isset($_SESSION['user'])) {
+	
+	$user_id = (int)$_SESSION['user']['id'];
 
     $query = 'SELECT 
 			lot.id, 
@@ -25,9 +27,9 @@ if (isset($_SESSION['user'])) {
         JOIN user ON bet.user_id = user.id 
 		JOIN lot ON bet.lot_id = lot.id 
 		JOIN category ON lot.category_id = category.id 
-		WHERE bet.user_id = ' . $_SESSION['user']['id'] . ';';
+		WHERE bet.user_id = ?;';
 
-    $bets = select_data($con, $query);
+    $bets = select_data($con, $query, ['bet.user_id' => $user_id]);
 
 } else {
 

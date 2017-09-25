@@ -14,7 +14,8 @@ $lot_name = $templateData['name'];
 $lot_url = $templateData['url'];
 $lot_category = $templateData['category'];
 $lot_description = $templateData['description'];
-$lot_step = $templateData['step'];
+$lot_step = $templateData['bet_step'];
+$lot_author = $templateData['author_id'];
 $lot_date = $templateData['expire_date'];
 $errors = $templateData['errors'];
 
@@ -58,7 +59,7 @@ if(!empty($bets)) {
 							Мин. ставка <span><?=$lot_price + $lot_step;?> р</span>
 						</div>
 					</div>
-					<? if(isset($_SESSION['user']) && !in_array('bet-done',$errors)): ?>
+					<? if(isset($_SESSION['user']) && !in_array('bet-done',$errors) && ($_SESSION['user']['id'] !== $lot_author)): ?>
 						<form class="lot-item__form" action="lot.php?id=<?=$id;?>" method="post">
 							<p class="lot-item__form-item <?=in_array('low-bet',$errors) ? $default_error_class : ''?>">
 								<label for="cost">Ваша ставка</label>
@@ -75,7 +76,7 @@ if(!empty($bets)) {
 							<tr class="history__item">
 								<td class="history__name"><?=$value['user_name'];?></td>
 								<td class="history__price"><?=$value['bet_cost'];?> р</td>
-								<td class="history__time"><?=timeManagement($value['ts']);?></td>
+								<td class="history__time"><?=timeManagement($value['bet_date']);?></td>
 							</tr>
 						<?php endforeach; ?>
 					</table>

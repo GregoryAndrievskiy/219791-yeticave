@@ -8,7 +8,7 @@ require_once 'mysql_helper.php';
 
 require_once 'init.php';
 
-$id = $_GET['id'];
+$id = (int)$_GET['id'];
 
 $lotQuery = 'SELECT
 	lot.id,
@@ -17,39 +17,40 @@ $lotQuery = 'SELECT
 	img_url,
 	expire_date,
 	description,
+	author_id,
 	bet_step,
 	category_id,
 	IFNULL(MAX(bet.cost), lot.start_price) as bet_price,
 	COUNT(bet.lot_id) as bets_number
 FROM lot
 LEFT JOIN bet ON bet.lot_id = lot.id
-WHERE lot.id = ' . $id . '
+WHERE lot.id = ?
 GROUP BY lot.id
 ORDER BY lot.expire_date DESC;';
 
-$selected_lot = select_data($con, $lotQuery)[0];
+$selected_lot = select_data($con, $lotQuery, ['lot.id' => $id])[0];
 
-$lot_category_id = $selected_lot['category_id'];
+$lot_category_id = (int)$selected_lot['category_id'];
 
 $lotCatQuery = 'SELECT
 	name,
 	cssClass
 FROM category
-WHERE category.id = ' . $lot_category_id . ';';
+WHERE category.id = ?;';
 
-$selected_lot_category = select_data($con, $lotCatQuery)[0];
+$selected_lot_category = select_data($con, $lotCatQuery, ['category.id' => $lot_category_id])[0];
 
 $betsQuery = 'SELECT
     user.name as user_name,
     user.id as user_id,
     bet.cost as bet_cost,
-    bet.bet_date as bet_date
+    bet.bet_date
 FROM bet
 JOIN user ON user.id = bet.user_id
-WHERE bet.lot_id = ' . $id . '
+WHERE bet.lot_id = ?
 ORDER BY bet.bet_date DESC';
 
-$selected_bet = select_data($con, $betsQuery);
+$selected_bet = select_data($con, $betsQuery, ['bet.lot_id' => $id]);
 
 if ($selected_lot) {
 	
@@ -70,7 +71,7 @@ if ($selected_lot) {
 	
 	if (!empty($bet)) {
 
-		if ($bet < ($price + $selected_lot['bets_step'])) {
+		if ($bet < ($price + $selected_lot['bet_step'])) {
 
 			$errors[] = 'low-bet';
 
@@ -98,7 +99,8 @@ if ($selected_lot) {
 		'description' => $selected_lot['description'],
 		'bets_number' => $selected_lot['bets_number'],
 		'expire_date' => $selected_lot['expire_date'],
-		'step' => $selected_lot['bets_step'],
+		'author_id' => $selected_lot['author_id'],
+		'bet_step' => $selected_lot['bet_step'],
 		'bets' => $selected_bet,
 		'errors' => $errors
 	];
@@ -122,10 +124,4 @@ if ($selected_lot) {
 
 	};
 };
-//print(count($_SESSION['user']));
-
-
-foreach ($_SESSION['user'] as $key => $value) {
-	print($key);
-}
 ?>

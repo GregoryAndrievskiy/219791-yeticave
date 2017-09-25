@@ -30,9 +30,9 @@ if (!empty($_POST)) {
 				
             } else {
 				
-				$query = 'SELECT * FROM user WHERE email = ' . $value . ';';
+				$query = 'SELECT * FROM user WHERE email = ?';
 
-                $query_result = select_data($con, $query);
+                $query_result = select_data($con, $query, ['email' => $value]);
 				
                 if (count($query_result) != 0) {
 					
@@ -64,7 +64,9 @@ if (!empty($_POST)) {
 		$file_url = 'img/avatar.jpeg';
 		
 		if (!$default_avatar) {
-			$file_name = $_POST['name'] . 'AvatarUser';
+			
+			$prefix = 'userAvatar';
+			$file_name = uniqid($prefix);
 			$file_path = __DIR__ . '/img/';
 			move_uploaded_file($_FILES['img_url']['tmp_name'], $file_path . $file_name);
 			$file_url = 'img/' . $file_name;
@@ -86,38 +88,21 @@ if (!empty($_POST)) {
 		
 		header('Location: /login.php');
         
-	} else {
-	
-	$sign_up_data = [
-		'errors' => $error_list,
-		'categories' => $select_data_categories
-	];
-
-	$content = renderTemplate('templates/sign-up.php', $sign_up_data);
-
-	$layout_data = [
-		'title' => 'Регистрация',
-		'categories' => $select_data_categories,
-		'content' => $content
-	];
-	
 	}
-
-} else {
-
-	$sign_up_data = [
-		'errors' => $error_list,
-		'categories' => $select_data_categories
-	];
-
-	$content = renderTemplate('templates/sign-up.php', $sign_up_data);
-
-	$layout_data = [
-		'title' => 'Регистрация',
-		'categories' => $select_data_categories,
-		'content' => $content
-	];
 }
+
+$sign_up_data = [
+	'errors' => $error_list,
+	'categories' => $select_data_categories
+];
+
+$content = renderTemplate('templates/sign-up.php', $sign_up_data);
+
+$layout_data = [
+	'title' => 'Регистрация',
+	'categories' => $select_data_categories,
+	'content' => $content
+];
 
 print(renderTemplate('templates/layout.php', $layout_data));
 ?>

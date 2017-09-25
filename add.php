@@ -66,8 +66,9 @@ if (isset($_SESSION['user'])) {
 
 		};
 		if (empty($error_list)) {
-
-			$file_name = $_POST['lot-date'] . $_POST['lot-rate'] . $_POST['lot-step'];
+	
+			$prefix = 'lotImg';
+			$file_name = uniqid($prefix);
 			$file_path = __DIR__ . '/img/';
 
 			move_uploaded_file($_FILES['lot-photo']['tmp_name'], $file_path . $file_name);
@@ -75,6 +76,10 @@ if (isset($_SESSION['user'])) {
 			$file_url = 'img/' . $file_name;
 			
 			$now = date('Y-m-d H:i:s', strtotime('now'));
+			
+			$stamp = strtotime($_POST['lot-date']);
+
+			$expire_date = date("Y-m-d", $stamp);
 
 			$lot_data = [
 				'start_price' => $_POST['lot-rate'],
@@ -84,21 +89,13 @@ if (isset($_SESSION['user'])) {
 				'category_id' => $_POST['lot-category'],
 				'author_id' => $_SESSION['user']['id'],
 				'description' => $_POST['lot-message'],
-				'expire_date' => $_POST['lot-date'],
+				'expire_date' => $expire_date,
 				'create_date' => $now
 			];
 
-			insert_data($con, 'lot', $lot_data);
+			$lot_id = insert_data($con, 'lot', $lot_data);
 			
-			$lotQuery = 'SELECT 
-				id
-			FROM lot
-			WHERE author_id = ' . $_SESSION['user']['id'] . '
-			ORDER BY create_date DESC';
-
-			$my_last_lot_id = select_data($con, $lotQuery)[0]['id'];
-
-            header('Location: /lot.php?id=' . $my_last_lot_id);
+            header('Location: /lot.php?id=' . $lot_id);
 
 		} else {
 
