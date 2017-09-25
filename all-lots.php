@@ -11,7 +11,7 @@ require_once 'init.php';
 $page_item_count = 3;
 $page_count = 0;
 $offset = 0;
-$current_page = $_GET['page'] ?? 1;
+$current_page = $_GET['id'] ?? 1;
 
 $lotCountQuery = 'SELECT COUNT(*) as count FROM lot;';
 
@@ -35,7 +35,7 @@ LIMIT ? OFFSET ?';
 
 $select_data_lates_lots = select_data($con, $latestLotsQuery, [$page_item_count, $offset]);
 
-$index_data = [
+$all_lots_data = [
 	'lots' => $select_data_lates_lots, 
 	'categories' => $select_data_categories,
 	'pages' => $pages,
@@ -43,7 +43,7 @@ $index_data = [
 	'current_page' => $current_page
 ];
 
-$content = renderTemplate('templates/index.php', $index_data );
+$content = renderTemplate('templates/all-lots.php', $all_lots_data );
 
 $layout_data = [
     'title' => 'Главная',

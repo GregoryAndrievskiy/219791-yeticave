@@ -8,16 +8,17 @@ require_once 'mysql_helper.php';
 
 require_once 'init.php';
 
-require_once 'userdata.php';
+$select_data_user = select_data($con, 'SELECT name, email, avatar_url, id, password FROM user ORDER by user.id');
 
 $error_list = [];
 
 if (!empty($_POST)) {
+	
+	$user;
+	$email = $_POST['login-email'];
+	$password = $_POST['login-password'];
 
-	$email = $_POST['email'];
-	$password = $_POST['password'];
-
-	if ($user = searchUserByEmail($email, $users)) {
+	if ($user = searchUserByEmail($email, $select_data_user)) {
 
 		if (password_verify($password, $user['password'])) {
 
@@ -26,27 +27,29 @@ if (!empty($_POST)) {
 
 		} else {
 
-			$error_list[] = 'password';
+			$error_list[] = 'login-password';
 
 		};
 	} else {
 
-		$error_list[] = 'email';
+		$error_list[] = 'login-email';
 
 	};
 };
 
 $login_data = [
 	'errors' => $error_list,
-	'categories' => $categories
+	'categories' => $select_data_categories
 ];
 
 $content = renderTemplate('templates/login.php', $login_data );
 
 $layout_data = [
     'title' => 'Вход',
-    'content' => $content
+    'categories' => $select_data_categories,
+	'content' => $content
 ];
 
 print(renderTemplate('templates/layout.php', $layout_data));
+
 ?>

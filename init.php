@@ -4,6 +4,8 @@ require_once('functions.php');
 
 $con = mysqli_connect('localhost', 'root', '', 'yeticave');
 
+$select_data_categories = select_data($con, 'SELECT id, name, cssClass FROM category ORDER by category.id');
+
 if($con == false) {
 		
 	$error = mysqli_connect_error();
@@ -23,8 +25,5 @@ if($con == false) {
 	
 	exit();
 }
-
-//$dddaaaa = insert_data($con, 'user', ['email' => 'zxxxxxx@wzcccccccccccz.ru', 'name' => 'zzz']);
-//echo $dddaaaa;
 
 ?>
