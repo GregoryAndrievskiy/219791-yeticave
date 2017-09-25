@@ -9,7 +9,7 @@ function timeManagement($timeStamp) {
 	$time;
 	if ($hours >= 24) {
 
-		$time = date("d.m.y в H:i", $timeStamp);
+		$time = date("d.m.y в H:i", strtotime($timeStamp));
 
 	} elseif ($hours >= 1) {
 
