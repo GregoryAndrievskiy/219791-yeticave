@@ -11,7 +11,7 @@
     <ul class="nav__list container">
 		<? foreach ($categories as $key => $value) : ?>
 			<li class="nav__item">
-				<a href="all-lots.html"><?=$value['name'];?></a>
+				<a href="all-lots.php?id=<?= $value['id']; ?>&page=1"><?=$value['name'];?></a>
 			</li>
 		<? endforeach ?>
     </ul>

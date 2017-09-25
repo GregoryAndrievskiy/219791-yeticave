@@ -2,9 +2,7 @@
 
 	$lot = $templateData['lots'];
 	$categories = $templateData['categories'];
-	$pages = $templateData['pages'];
-	$page_count = $templateData['page_count'];
-	$current_page = $templateData['current_page'];
+	$pagination = $templateData['pagination'];
 
 ?>
 <main class="container">
@@ -14,7 +12,7 @@
         <ul class="promo__list">
 			<? foreach ($categories as $key => $value) : ?>
 				<li class="promo__item <?=htmlspecialchars($value['cssClass']); ?>">
-					<a class="promo__link" href="all-lots.php?<?= $value['id']; ?>"><?=htmlspecialchars($value['name']); ?></a>
+					<a class="promo__link" href="all-lots.php?id=<?= $value['id']; ?>&page=1"><?=htmlspecialchars($value['name']); ?></a>
 				</li>
 			<? endforeach; ?>
         </ul>
@@ -33,7 +31,7 @@
 		<? foreach ($lot as $key => $value) : ?>
             <li class="lots__item lot">
                 <div class="lot__image">
-                    <img src="<?=$value['img_url']; ?>" width="350" height="260" alt="Сноуборд">
+                    <img src="<?=$value['img_url']; ?>" width="350" height="260" alt="<?=htmlspecialchars($value['cat']); ?>">
                 </div>
                 <div class="lot__info">
                     <span class="lot__category"><?=htmlspecialchars($value['cat']); ?></span>
@@ -52,15 +50,5 @@
 		<? endforeach; ?>
         </ul>
     </section>
-	<? if ($page_count > 1) : ?>
-		<ul class="pagination-list">
-			<li class="pagination-item pagination-item-prev"><a>Назад</a></li>
-			<? foreach ($pages as $key) : ?>
-			<li class="pagination-item <?= ($key == $current_page) ? 'pagination-item-active' : '' ;?> ">
-				<a href="index.php?page=<?= $key; ?>"><?= $key; ?></a>
-			</li>
-			<? endforeach; ?>
-			<li class="pagination-item pagination-item-next"><a href="#">Вперед</a></li>
-		</ul>
-	<? endif; ?>
+	<?php print($pagination); ?>
 </main>

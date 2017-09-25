@@ -124,7 +124,6 @@ function insert_data($con, $table, $data = []) {
 	return false;
 };
 
-
 function exec_query($con, $query, $data = []) {
 
     $stmt = db_get_prepare_stmt($con, $query, $data);
@@ -139,6 +138,19 @@ function exec_query($con, $query, $data = []) {
 		}
     }
     return $result;
+};
+
+function pagination_data($type, $current_page, $page_item_count, $lot_count) {
+	
+	$page_count = ceil($lot_count / $page_item_count);
+	$pages = range(1, $page_count);
+	
+	return [
+		'type' => $type,
+		'pages' => $pages,
+		'page_count' => $page_count,
+		'current_page' => $current_page
+	];
 };
 
 ?>

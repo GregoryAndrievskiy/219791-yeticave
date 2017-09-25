@@ -54,7 +54,7 @@
         <ul class="nav__list container">
 			<? foreach ($categories as $key => $value) : ?>
 				<li class="nav__item">
-					<a href="all-lots.html"><?=htmlspecialchars($value['name']); ?></a>
+					<a href="all-lots.php?id=<?= $value['id']; ?>&page=1"><?=htmlspecialchars($value['name']); ?></a>
 				</li>
 			<? endforeach; ?>
 		</ul>
