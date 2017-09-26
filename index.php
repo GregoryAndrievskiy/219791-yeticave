@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 require_once 'init.php';
 
@@ -37,7 +36,7 @@ $content = renderTemplate('templates/index.php', [
 $layout_data = [
     'title' => 'Главная',
 	'is_index' => true,
-    'categories' => $select_data_categories,
+    'categories' => $categories_list,
 	'pagination' => $pagination,
 	'content' => $content
 ];

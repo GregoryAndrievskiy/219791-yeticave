@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 require_once 'init.php';
 
 
@@ -41,7 +39,7 @@ $content = renderTemplate('templates/mylots.php', $bets_data );
 
 $layout_data = [
     'title' => 'Мои ставки',
-    'categories' => $select_data_categories,
+    'categories' => $categories_list,
 	'content' => $content
 ];
 

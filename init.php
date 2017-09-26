@@ -1,14 +1,14 @@
 <?php
 
-require_once 'functions.php';
+session_start();
 
-require_once 'mysql_helper.php';
+date_default_timezone_set('Europe/Moscow');
+
+require_once 'functions.php';
 
 require_once 'vendor/autoload.php';
 
 $con = mysqli_connect('localhost', 'root', '', 'yeticave');
-
-$select_data_categories = select_data($con, 'SELECT id, name, cssClass FROM category ORDER by category.id');
 
 if($con == false) {
 		
@@ -18,16 +18,11 @@ if($con == false) {
 		'error' => $error
 	];
 
-	$content = renderTemplate('templates/error.php', $error_data);
-	
-	$layout_data = [
-		'title' => 'Ошибка',
-		'content' => $content
-	];
-	
-	print(renderTemplate('templates/layout.php', $layout_data));
+	print(renderTemplate('templates/error.php', $error_data));
 	
 	exit();
 }
+
+$categories_list = select_data($con, 'SELECT id, name, cssClass FROM category ORDER by category.id');
 
 ?>

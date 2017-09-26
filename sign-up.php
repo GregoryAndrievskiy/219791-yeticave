@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 require_once 'init.php';
 
 $valid_list = ['reg-email', 'password', 'name', 'message'];
@@ -88,15 +86,14 @@ if (!empty($_POST)) {
 }
 
 $sign_up_data = [
-	'errors' => $error_list,
-	'categories' => $select_data_categories
+	'errors' => $error_list
 ];
 
 $content = renderTemplate('templates/sign-up.php', $sign_up_data);
 
 $layout_data = [
 	'title' => 'Регистрация',
-	'categories' => $select_data_categories,
+	'categories' => $categories_list,
 	'content' => $content
 ];
 

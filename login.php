@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 require_once 'init.php';
 
 $select_data_user = select_data($con, 'SELECT name, email, avatar_url, id, password FROM user ORDER by user.id');
@@ -34,15 +32,14 @@ if (!empty($_POST)) {
 };
 
 $login_data = [
-	'errors' => $error_list,
-	'categories' => $select_data_categories
+	'errors' => $error_list
 ];
 
 $content = renderTemplate('templates/login.php', $login_data );
 
 $layout_data = [
     'title' => 'Вход',
-    'categories' => $select_data_categories,
+    'categories' => $categories_list,
 	'content' => $content
 ];
 

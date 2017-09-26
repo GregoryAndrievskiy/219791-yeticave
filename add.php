@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 require_once 'init.php';
 
 $valid_list = ['lot-name', 'lot-category', 'lot-message', 'lot-rate', 'lot-step', 'lot-date'];
@@ -31,7 +29,7 @@ if (isset($_SESSION['user'])) {
 
 			} elseif ($value === 'lot-category') {
 
-				if (!array_key_exists(($_POST[$value] - 1),$select_data_categories)) {
+				if (!array_key_exists(($_POST[$value] - 1),$categories_list)) {
 					$error_list[] = $value;
 				}
 
@@ -97,14 +95,14 @@ if (isset($_SESSION['user'])) {
 
 			$form_data = [
 				'errors' => $error_list,
-				'categories' => $select_data_categories
+				'categories' => $categories_list
 			];
 
 			$content = renderTemplate('templates/add.php', $form_data);
 
 			$layout_data = [
 				'title' => 'Добавление лота',
-				'categories' => $select_data_categories,
+				'categories' => $categories_list,
 				'content' => $content
 			];
 		}
@@ -112,14 +110,14 @@ if (isset($_SESSION['user'])) {
 
 		$form_data = [
 			'errors' => $error_list,
-			'categories' => $select_data_categories
+			'categories' => $categories_list
 		];
 
 		$content = renderTemplate('templates/add.php', $form_data);
 
 		$layout_data = [
 			'title' => 'Добавление лота',
-			'categories' => $select_data_categories,
+			'categories' => $categories_list,
 			'content' => $content
 		];
 	}

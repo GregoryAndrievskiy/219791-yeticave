@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 require_once 'init.php';
 
@@ -37,12 +36,12 @@ if ($category_id) {
 
 	$content = renderTemplate('templates/all-lots.php', [
 		'lots' => $lots, 
-		'categories' => $select_data_categories
+		'categories' => $categories_list
 	]);
 
 	$layout_data = [
 	    'title' => 'Главная',
-	    'categories' => $select_data_categories,
+	    'categories' => $categories_list,
 	    'pagination' => $pagination,
 		'content' => $content
 	];

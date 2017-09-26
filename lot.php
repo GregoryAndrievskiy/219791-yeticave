@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 require_once 'init.php';
 
 $id = (int)$_GET['id'];
@@ -91,7 +89,7 @@ if ($selected_lot) {
 		'category' => $selected_lot_category['name'],
 		'price' => $price,
 		'url' => $selected_lot['img_url'],
-		'categories' => $select_data_categories,
+		'categories' => $categories_list,
 		'description' => $selected_lot['description'],
 		'bets_number' => $selected_lot['bets_number'],
 		'expire_date' => $selected_lot['expire_date'],
@@ -105,7 +103,7 @@ if ($selected_lot) {
 
 	$layout_data = [
 		'title' => $lot_data['name'],
-		'categories' => $select_data_categories,
+		'categories' => $categories_list,
 		'content' => $content
 	];
 

@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 require_once 'init.php';
 
@@ -30,13 +29,12 @@ $pagination = renderTemplate('templates/pagination.php', [
 
 $content = renderTemplate('templates/search.php', [
 	'pagination' => $pagination,
-	'lots' => $lots, 
-	'categories' => $select_data_categories
+	'lots' => $lots
 ]);
 
 $layout_data = [
     'title' => 'Результаты поиска',
-    'categories' => $select_data_categories,
+    'categories' =>$categories_list,
 	'content' => $content
 ];
 

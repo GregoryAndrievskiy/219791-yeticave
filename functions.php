@@ -1,7 +1,5 @@
 <?php
 
-date_default_timezone_set('Europe/Moscow');
-
 function timeManagement($timeStamp) {
 
 	$passedTime = time() - strtotime($timeStamp);
@@ -156,7 +154,7 @@ function get_offset($current_page,$items_per_page)
 	}
 	
 	return $offset;
-}
+};
 
 /**
 * Возвращает массив для построения пагинации
@@ -176,5 +174,49 @@ function get_pagination_range($items_per_page,$items_count)
 
 	$pages = range(1, $page_count);
 	return $pages;
-}
+};
+
+/**
+ * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
+ *
+ * @param $link mysqli Ресурс соединения
+ * @param $sql string SQL запрос с плейсхолдерами вместо значений
+ * @param array $data Данные для вставки на место плейсхолдеров
+ *
+ * @return mysqli_stmt Подготовленное выражение
+ */
+function db_get_prepare_stmt($link, $sql, $data = []) {
+    $stmt = mysqli_prepare($link, $sql);
+
+    if ($data) {
+        $types = '';
+        $stmt_data = [];
+
+        foreach ($data as $value) {
+            $type = null;
+
+            if (is_int($value)) {
+                $type = 'i';
+            }
+            else if (is_string($value)) {
+                $type = 's';
+            }
+            else if (is_double($value)) {
+                $type = 'd';
+            }
+
+            if ($type) {
+                $types .= $type;
+                $stmt_data[] = $value;
+            }
+        }
+
+        $values = array_merge([$stmt, $types], $stmt_data);
+
+        $func = 'mysqli_stmt_bind_param';
+        $func(...$values);
+    }
+
+    return $stmt;
+};
 ?>
