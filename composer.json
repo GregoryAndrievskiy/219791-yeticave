@@ -1,4 +1,6 @@
 {
     "name": "gregory/219791-yeticave",
-    "require": {}
+    "require": {
+        "swiftmailer/swiftmailer": "@stable"
+    }
 }

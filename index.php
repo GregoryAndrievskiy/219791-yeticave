@@ -3,6 +3,8 @@ session_start();
 
 require_once 'init.php';
 
+require_once 'getwinner.php';
+
 $lot_count_sql = 'SELECT * FROM lot WHERE expire_date > NOW();';
 $lot_count = count(select_data($con, $lot_count_sql));
 
@@ -41,4 +43,6 @@ $layout_data = [
 ];
 
 print(renderTemplate('templates/layout.php', $layout_data));
+
+print($letter);
 ?>
