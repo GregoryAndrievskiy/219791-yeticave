@@ -1,6 +1,10 @@
 <?php
 
-require_once('functions.php');
+require_once 'functions.php';
+
+require_once 'mysql_helper.php';
+
+require_once 'vendor/autoload.php';
 
 $con = mysqli_connect('localhost', 'root', '', 'yeticave');
 
