@@ -2,7 +2,6 @@
 
 require_once 'functions.php';
 
-$categories = $templateData['categories'];
 $bets = $templateData['bets'];
 
 ?>

@@ -4,28 +4,21 @@
 	$extra_params = $templateData['extra_params'];
 	$current_page = $_GET['page'] ?? 1;
 	
-	$next_page;
-	if ($current_page < count($range)) {
-		
-		$next_page = $current_page + 1;
-		
-	} else {
-		
-		$next_page = count($range);
-		
-	};
+$next_page = count($range); 
 
-	$prev_page;
-	
-	if ($current_page > 1) {
-		
-		$prev_page = $current_page - 1;
-		
-	} else {
-		
-		$prev_page = 1;
-		
-	};
+if ($current_page < $next_page) { 
+
+	$next_page = $current_page + 1; 
+
+} 
+
+$prev_page = 1; 
+
+if ($current_page > $prev_page) { 
+
+	$prev_page = $current_page - 1; 
+
+} 
 	
 if (!empty($extra_params)) {
 	

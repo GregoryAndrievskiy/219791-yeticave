@@ -2,11 +2,10 @@
 
 require_once 'functions.php';
 
-$id = $_GET['id'];
+$id = (int)$_GET['id'];
 
 $default_error_class = 'form__item--invalid';
 
-$categories = $templateData['categories'];
 $bets = $templateData['bets'];
 $bets_number = $templateData['bets_number'];
 $lot_price = $templateData['price'];

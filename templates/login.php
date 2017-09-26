@@ -1,7 +1,6 @@
 <?php
 
 	$errors = $templateData['errors'];
-	$categories = $templateData['categories'];
 	$default_error_class = 'form__item--invalid';
 
 ?>
