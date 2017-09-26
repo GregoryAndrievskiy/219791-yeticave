@@ -1,6 +1,5 @@
 {
-    "name": "yeticave",
-    "description": "Личный проект «YetiCave» от HTML Academy",
-    "type": "project",
+    "name": "gregory/219791-yeticave",
+    "type": "library",
     "require": {}
 }

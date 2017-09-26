@@ -1,14 +1,12 @@
 ﻿<?php
 
-	$id = (int)$_GET['category'];
 	$lot = $templateData['lots'];
-	$categories = $templateData['categories'];
 
 ?>
 <div class="container">
 	<section class="lots">
-	  <h2>Все лоты в категории <span>«<?=$categories[$id - 1]['name'];?>»</span></h2>
-	  <ul class="lots__list">
+		<h2>Результаты поиска по запросу «<span>Union</span>»</h2>
+		<ul class="lots__list">
 		<? foreach ($lot as $key => $value) : ?>
 			<li class="lots__item lot">
 				<div class="lot__image">
@@ -29,6 +27,7 @@
 				</div>
 			</li>
 		<? endforeach; ?>
-	  </ul>
+		</ul>
 	</section>
+	<?php if($pagination) print($pagination); ?>
 </div>

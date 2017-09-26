@@ -124,7 +124,6 @@ function insert_data($con, $table, $data = []) {
 	return false;
 };
 
-
 function exec_query($con, $query, $data = []) {
 
     $stmt = db_get_prepare_stmt($con, $query, $data);
@@ -141,4 +140,41 @@ function exec_query($con, $query, $data = []) {
     return $result;
 };
 
+/**
+* Вычисляет параметр OFFSET для SQL запроса
+*
+* @param integer $current_page - текущая страница
+* @param integer $items_per_page - количество элементов на странице
+* @return integer
+*/
+function get_offset($current_page,$items_per_page)
+{
+	if (is_numeric($current_page)) {
+		$offset = (intval($current_page) - 1) * $items_per_page;
+	} else {
+		$offset = 0;
+	}
+	
+	return $offset;
+}
+
+/**
+* Возвращает массив для построения пагинации
+* 
+* @param integer $items_per_page - количество элементов на странице
+* @param integer $items_count - общее количество
+* @return array
+*/
+function get_pagination_range($items_per_page,$items_count)
+{
+
+	if ($items_count > 0) {
+		$page_count = ceil($items_count / $items_per_page);
+	} else {
+		$page_count = 1;
+	}
+
+	$pages = range(1, $page_count);
+	return $pages;
+}
 ?>

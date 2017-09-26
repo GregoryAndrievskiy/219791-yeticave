@@ -1,9 +1,12 @@
 ﻿<?php
 
+	$id = (int)$_GET['category'];
     $page_title = $templateData['title'];
     $user_avatar = 'img/user.jpg';
     $page_content = $templateData['content'];
 	$categories = $templateData['categories'];
+	$isIndexPage = $templateData['is_index'];
+	$pagination = $templateData['pagination'];
 
 ?>
 <!DOCTYPE html>
@@ -21,7 +24,7 @@
         <a class="main-header__logo" href="index.php">
             <img src="img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
         </a>
-        <form class="main-header__search" method="get" action="https://echo.htmlacademy.ru">
+        <form class="main-header__search" method="get" action="search.php">
             <input type="search" name="search" placeholder="Поиск лота">
             <input class="main-header__search-btn" type="submit" name="find" value="Найти">
         </form>
@@ -48,13 +51,39 @@
         </nav>
     </div>
 </header>
-<?php print($page_content); ?>
+<main <?=($isIndexPage) ? 'class="container"' : ''?>>
+	<? if($isIndexPage): ?>
+		<section class="promo">
+			<h2 class="promo__title">Нужен стафф для катки?</h2>
+			<p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
+			<ul class="promo__list">
+				<? foreach ($categories as $key => $value) : ?>
+					<li class="promo__item <?=htmlspecialchars($value['cssClass']); ?>">
+						<a class="promo__link" href="all-lots.php?category=<?= $value['id']; ?>"><?=htmlspecialchars($value['name']); ?></a>
+					</li>
+				<? endforeach; ?>
+			</ul>
+		</section>
+	<? else: ?>
+		<nav class="nav">
+			<ul class="nav__list container ">
+				<? foreach ($categories as $key => $value) : ?>
+					<li class="nav__item <?= ($key == $id - 1) ? 'nav__item--current' : '' ;?>">
+						<a href="all-lots.php?category=<?= $value['id']; ?>"><?=$value['name'];?></a>
+					</li>
+				<? endforeach ?>
+			</ul>
+		</nav>
+	<? endif; ?>
+	<?php print($page_content); ?>
+	<?php if($pagination) print($pagination); ?>
+</main>
 <footer class="main-footer">
     <nav class="nav">
         <ul class="nav__list container">
 			<? foreach ($categories as $key => $value) : ?>
-				<li class="nav__item">
-					<a href="all-lots.html"><?=htmlspecialchars($value['name']); ?></a>
+				<li class="nav__item <?= ($key == $id - 1) ? 'nav__item--current' : '' ;?>">
+					<a href="all-lots.php?category=<?= $value['id']; ?>"><?=htmlspecialchars($value['name']); ?></a>
 				</li>
 			<? endforeach; ?>
 		</ul>

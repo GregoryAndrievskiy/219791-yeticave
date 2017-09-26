@@ -7,8 +7,8 @@ require_once 'mysql_helper.php';
 
 require_once 'init.php';
 
-$lot_count_sql = 'SELECT * FROM lot WHERE expire_date > NOW();';
-$lot_count = count(select_data($con, $lot_count_sql));
+$lot_count_sql = 'SELECT COUNT(*) as count FROM lot;';
+$lot_count = select_data($con, $lot_count_sql)[0]['count'];
 
 $lots_per_page = 3;
 $offset = get_offset($_GET['page'],$lots_per_page);
@@ -32,15 +32,15 @@ $pagination = renderTemplate('templates/pagination.php', [
 	'range' => get_pagination_range($lots_per_page,$lot_count),
 ]);
 
-$content = renderTemplate('templates/index.php', [
-	'lots' => $lots
+$content = renderTemplate('templates/search.php', [
+	'pagination' => $pagination,
+	'lots' => $lots, 
+	'categories' => $select_data_categories
 ]);
 
 $layout_data = [
-    'title' => 'Главная',
-	'is_index' => true,
+    'title' => 'Результаты поиска',
     'categories' => $select_data_categories,
-	'pagination' => $pagination,
 	'content' => $content
 ];
 
