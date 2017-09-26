@@ -140,17 +140,41 @@ function exec_query($con, $query, $data = []) {
     return $result;
 };
 
-function pagination_data($type, $current_page, $page_item_count, $lot_count) {
+/**
+* Вычисляет параметр OFFSET для SQL запроса
+*
+* @param integer $current_page - текущая страница
+* @param integer $items_per_page - количество элементов на странице
+* @return integer
+*/
+function get_offset($current_page,$items_per_page)
+{
+	if (is_numeric($current_page)) {
+		$offset = (intval($current_page) - 1) * $items_per_page;
+	} else {
+		$offset = 0;
+	}
 	
-	$page_count = ceil($lot_count / $page_item_count);
-	$pages = range(1, $page_count);
-	
-	return [
-		'type' => $type,
-		'pages' => $pages,
-		'page_count' => $page_count,
-		'current_page' => $current_page
-	];
-};
+	return $offset;
+}
 
+/**
+* Возвращает массив для построения пагинации
+* 
+* @param integer $items_per_page - количество элементов на странице
+* @param integer $items_count - общее количество
+* @return array
+*/
+function get_pagination_range($items_per_page,$items_count)
+{
+
+	if ($items_count > 0) {
+		$page_count = ceil($items_count / $items_per_page);
+	} else {
+		$page_count = 1;
+	}
+
+	$pages = range(1, $page_count);
+	return $pages;
+}
 ?>

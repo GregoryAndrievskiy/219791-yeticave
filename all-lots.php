@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 require_once 'functions.php';
@@ -8,48 +7,56 @@ require_once 'mysql_helper.php';
 
 require_once 'init.php';
 
-$page_item_count = 3;
-$offset = 0;
-$current_category = (int)$_GET['id'] ?? 1;
-$current_category_page = (int)$_GET['page'] ?? 1;
-$offset = ($current_category_page - 1) * $page_item_count;
+$category_id = (int)$_GET['category'];
 
-$lotCountQuery = 'SELECT COUNT(*) as count FROM lot WHERE lot.category_id = ?;';
+if ($category_id) {
 
-$lot_count = select_data($con, $lotCountQuery, ['lot.category_id' => $current_category])[0]['count'];
+	$lot_count_sql = 'SELECT COUNT(*) as count FROM lot WHERE lot.category_id = ?;';
+	$lot_count = select_data($con, $lot_count_sql, ['lot.category_id' => $category_id])[0]['count'];
 
-$categoryLotsQuery = 'SELECT 
-	lot.id, 
-	lot.name, 
-	lot.start_price, 
-	lot.img_url,
-	category.name AS cat,
-	lot.expire_date
-FROM lot 
-LEFT JOIN category ON category.id = lot.category_id 
-WHERE lot.category_id = ?
-ORDER BY expire_date ASC
-LIMIT ? OFFSET ?';
+	$lots_per_page = 3;
+	$offset = get_offset($_GET['page'],$lots_per_page);
 
-$select_data_category_lots = select_data($con, $categoryLotsQuery, ['lot.category_id' => $current_category, $page_item_count, $offset]);
+	$lots_sql = 'SELECT 
+		lot.id, 
+		lot.name, 
+		lot.start_price, 
+		lot.img_url,
+		category.name AS cat,
+		lot.expire_date
+	FROM lot 
+	LEFT JOIN category ON category.id = lot.category_id 
+	WHERE lot.category_id = ?
+	ORDER BY expire_date ASC
+	LIMIT ? OFFSET ?';
 
-$pagination_data = pagination_data('all-lots.php?id='.$current_category.'&', $current_category_page, $page_item_count, $lot_count);
+	$lots = select_data($con, $lots_sql, ['lot.category_id' => $category_id, $lots_per_page, $offset]);
 
-$pagination = renderTemplate('templates/pagination.php', $pagination_data);
+	$pagination = renderTemplate('templates/pagination.php', [
+		'range' => get_pagination_range($lots_per_page,$lot_count),
+		'extra_params' => [
+			'category' => $category_id
+		]
+	]);
 
-$all_lots_data = [
-	'lots' => $select_data_category_lots, 
-	'categories' => $select_data_categories,
-	'pagination' => $pagination
-];
+	$content = renderTemplate('templates/all-lots.php', [
+		'lots' => $lots, 
+		'categories' => $select_data_categories
+	]);
 
-$content = renderTemplate('templates/all-lots.php', $all_lots_data );
+	$layout_data = [
+	    'title' => 'Главная',
+	    'categories' => $select_data_categories,
+	    'pagination' => $pagination,
+		'content' => $content
+	];
 
-$layout_data = [
-    'title' => 'Главная',
-    'categories' => $select_data_categories,
-	'content' => $content
-];
+	print(renderTemplate('templates/layout.php', $layout_data));
 
-print(renderTemplate('templates/layout.php', $layout_data));
+} else {
+	header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
+	print('404');
+}
+
+
 ?>
