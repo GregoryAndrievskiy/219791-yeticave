@@ -2,12 +2,6 @@
 
 session_start();
 
-require_once ('vendor/autoload.php');
-
-require_once 'functions.php';
-
-require_once 'mysql_helper.php';
-
 require_once 'init.php';
 
 $select_data_user = select_data($con, 'SELECT name, email, avatar_url, id, password FROM user ORDER by user.id');

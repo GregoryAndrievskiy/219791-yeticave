@@ -1,12 +1,6 @@
 <?php
 session_start();
 
-require_once ('vendor/autoload.php');
-
-require_once 'functions.php';
-
-require_once 'mysql_helper.php';
-
 require_once 'init.php';
 
 $lot_count_sql = 'SELECT * FROM lot WHERE expire_date > NOW();';
