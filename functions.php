@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Рассчет времени, прошедшего с заданного момента
+ *
+ * @param string $timeStamp метка заданного момента
+ *
+ * @return string
+ */
+
 function timeManagement($timeStamp) {
 
 	$passedTime = time() - strtotime($timeStamp);
@@ -21,6 +29,14 @@ function timeManagement($timeStamp) {
 	return $time;
 };
 
+/**
+ * Рассчет времени, оставшегося заданного момента
+ *
+ * @param string $expire метка заданного момента
+ *
+ * @return string
+ */
+
 function timeRemaining($expire) {
 	
 	$expire_time;
@@ -39,6 +55,15 @@ function timeRemaining($expire) {
 	}
 	return $expire_time;
 };
+
+/**
+ * Функция шаблонизации
+ *
+ * @param string $templatePath путь к HTML-шаблону
+ * @param array $templateData данные для вставки в шаблон
+ *
+ * @return string Сгенерированный шаблон
+ */
 
 
 function renderTemplate($templatePath, $templateData) {
@@ -88,6 +113,16 @@ function search_user_by_email($con, $email) {
 	return false;
 };
 
+/**
+ * Функция получения данных из БД
+ *
+ * @param $con ресурс соединения
+ * @param $query SQL-запрос
+ * @param array $data Опционально передаваемые значения
+ *
+ * @return array массив с данными
+ *
+ */
 function select_data($con, $query, $data = []) {
 
     $stmt = db_get_prepare_stmt($con, $query, $data);
@@ -108,6 +143,17 @@ function select_data($con, $query, $data = []) {
 	}
 	return $rows;
 };
+
+/**
+ * Функция вставки данных в БД
+ *
+ * @param $con ресурс соединения
+ * @param $table Таблица mysql, с которой будет происходить работа
+ * @param array $data Вставляемые значения
+ *
+ * @return bool|id
+ *
+ */
 
 function insert_data($con, $table, $data = []) {
 
@@ -139,6 +185,16 @@ function insert_data($con, $table, $data = []) {
     }
 	return false;
 };
+
+/**
+ * Функция выполнения произвольного запроса (кроме SELECT И INSERT)
+ *
+ * @param $con ресурс соединения
+ * @param $query SQL-запрос
+ * @param array $data Передаваемые значения
+ * @return bool
+ *
+ */
 
 function exec_query($con, $query, $data = []) {
 

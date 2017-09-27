@@ -2,50 +2,58 @@
 
 require_once 'init.php';
 
-$expireQuery = 'SELECT 
-	lot.id,
-	lot.name,
-	(SELECT bet.user_id FROM bet 
-WHERE bet.lot_id = lot.id 
-ORDER BY bet.bet_date DESC LIMIT 1) as winner_id
-FROM lot 
-WHERE lot.winner_id is NULL AND lot.expire_date <= NOW()';
+$winners = [];
+$noWinnerQuery = 'SELECT id FROM lot WHERE winner_id IS NULL AND expire_date < NOW()';
 
-$expired_lots = select_data($con, $expireQuery);
+$lots_without_winner = select_data($con, $noWinnerQuery);
 
-forEach($expired_lots as $key => $value) {
-	if ($value) {
-		
-		$winnerIdQuery = 'UPDATE lot SET winner_id = ? WHERE lot.id = ?';
-			
-		exec_query($con, $winnerIdQuery, [$value['winner_id'], $value['id']]);
-		
-		$winnerQuery = 'SELECT name, email FROM user WHERE id= ?';
-		
-		$winner = select_data($con, $winnerQuery, [$value['winner_id']])[0];
-		
-		$content = [
-			'name' => $winner['name'],
-			'lot_url' => 'lot.php?id='.$value['id'],
-			'lot_name' => $value['name']
-		];
+$query = 'SELECT 
+		user.id AS user_id, 
+		user.name AS user_name, 
+		user.email, 
+		lot.id AS lot_id, 
+		lot.name
+	FROM bet
+	INNER JOIN lot ON bet.lot_id = lot.id
+	INNER JOIN user ON bet.user_id = user.id
+	WHERE lot_id= ?
+	ORDER BY bet.id DESC
+	LIMIT 1 OFFSET 0';
 
-		$letter = renderTemplate('templates/email.php', $content);
+if ($lots_without_winner) {
+	
+    $updateWinnerQuery = 'UPDATE lot SET winner_id = ? WHERE lot.id = ?';
+	
+    foreach ($lots_without_winner as $key) {
+		
+        $temp = select_data($con, $query, [$key['id']]);
+        exec_query($con, $updateWinnerQuery, [$temp[0]['user_id'], $key['id']]);
+        $winners[] = $temp[0];
+    }
+}
 
-		$transport = new Swift_SmtpTransport('smtp.mail.ru', 465, 'ssl');
-		$transport->setUsername('doingsdone@mail.ru');
-		$transport->setPassword('rds7BgcL');
-		
-		$message = new Swift_Message();
-		$message->setSubject('Ваш ставка победила');
-		$message->setFrom('doingsdone@mail.ru');
-		$message->setTo($winner['email']);
-		$message->setContentType('text/html');
-		$message->setBody($letter);
-		$mailer = new Swift_Mailer($transport);
-		$mailer->send($message);
-		
-		print($letter);
-	}
-};
+foreach ($winners as $winner) {
+
+	$content = [
+		'name' => $winner['user_name'],
+		'lot_url' => 'lot.php?id='.$winner['lot_id'],
+		'lot_name' => $winner['name']
+	];
+
+	$letter = renderTemplate('templates/email.php', $content);
+
+	$transport = new Swift_SmtpTransport('smtp.mail.ru', 465, 'ssl');
+	$transport->setUsername('doingsdone@mail.ru');
+	$transport->setPassword('rds7BgcL');
+
+	$message = new Swift_Message();
+	$message->setSubject('Ваш ставка победила');
+	$message->setFrom('doingsdone@mail.ru');
+	$message->setTo($winner['email']);
+	$message->setContentType('text/html');
+	$message->setBody($letter);
+	$mailer = new Swift_Mailer($transport);
+	$mailer->send($message);
+}
+
 ?>
