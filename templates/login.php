@@ -4,7 +4,11 @@
 	$default_error_class = 'form__item--invalid';
 
 ?>
+
 <form class="form container" action="login.php" method="post"> <!-- form--invalid -->
+	<? if ($_GET['reg'] === 'ok'): ?>
+		<h2>Теперь вы можете войти, используя свой email и пароль</h2>
+	<? endif; ?>
 	<h2>Вход</h2>
 	<div class="form__item <?=in_array('login-email',$errors) ? $default_error_class : ''?>"> <!-- form__item--invalid -->
 		<label for="email">E-mail*</label>

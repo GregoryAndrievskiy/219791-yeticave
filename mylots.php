@@ -16,9 +16,11 @@ if (isset($_SESSION['user'])) {
 			bet.bet_date, 
 			bet.cost, 
 			lot.expire_date, 
+			lot.winner_id,
+			user.contacts AS contacts,
 			category.name AS category  
 		FROM bet 
-        JOIN user ON bet.user_id = user.id 
+        JOIN user ON bet.user_id = user.id
 		JOIN lot ON bet.lot_id = lot.id 
 		JOIN category ON lot.category_id = category.id 
 		WHERE bet.user_id = ?;';

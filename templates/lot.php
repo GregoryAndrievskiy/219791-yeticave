@@ -37,7 +37,7 @@ if(!empty($bets)) {
 		<div class="lot-item__right">
 			<div class="lot-item__state">
 				<div class="lot-item__timer timer">
-					<?=htmlspecialchars(timeRemaining($lot_date));?>
+					<?=(strtotime($lot_date) > strtotime('now')) ? htmlspecialchars(timeRemaining($lot_date)) : print('завершен');?>
 				</div>
 				<div class="lot-item__cost-state">
 					<div class="lot-item__rate">

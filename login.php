@@ -2,34 +2,33 @@
 
 require_once 'init.php';
 
-$select_data_user = select_data($con, 'SELECT name, email, avatar_url, id, password FROM user ORDER by user.id');
-
+$valid_list = ['login-email','login-password'];
 $error_list = [];
 
 if (!empty($_POST)) {
 	
-	$user;
-	$email = $_POST['login-email'];
-	$password = $_POST['login-password'];
+	$error_list = get_empty_required($_POST, $valid_list);
 
-	if ($user = searchUserByEmail($email, $select_data_user)) {
+	if (empty($error_list)) {
+		
+		$user = search_user_by_email($con,$_POST['login-email']);
 
-		if (password_verify($password, $user['password'])) {
-
+		if (!$user) {
+			
+			$error_list[] = 'login-email';
+		}
+		if ($user && password_verify($_POST['login-password'], $user['password'])) {
+			
 			$_SESSION['user'] = $user;
 			header("Location: /index.php");
-
+			
 		} else {
-
+			
 			$error_list[] = 'login-password';
 
-		};
-	} else {
-
-		$error_list[] = 'login-email';
-
-	};
-};
+		}
+	}
+}
 
 $login_data = [
 	'errors' => $error_list

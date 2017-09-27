@@ -32,7 +32,7 @@
         <nav class="user-menu">
 			<? if(isset($_SESSION['user'])): ?>
 				<div class="user-menu__image">
-					<a href="mylots.php"><img src="<?=$_SESSION['user']['avatar_url']; ?>" width="40" height="40" alt="Пользователь"></a>
+					<a href="mylots.php"><img src="<?=!empty($_SESSION['user']['avatar-url']) ? $_SESSION['user']['avatar-url'] : 'img/avatar.jpg'?>" width="40" height="40" alt="Пользователь"></a>
 				</div>
 				<div class="user-menu__logged">
 					<p><?=htmlspecialchars($_SESSION['user']['name']); ?></p>

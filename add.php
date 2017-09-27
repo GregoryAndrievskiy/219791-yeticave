@@ -9,125 +9,89 @@ if (isset($_SESSION['user'])) {
 
 	if (!empty($_POST)) {
 
-		foreach ($valid_list as $key => $value) {
+		$error_list = get_empty_required($_POST, $valid_list);
 
-			if(!$_POST[$value]) {
-
-				if ($value !== 'lot-category') {
-					
-					$error_list[] = $value;
-					
-				}
-
-			} elseif ($value === 'lot-rate' || $value === 'lot-step') {
-
-				if (!is_numeric($_POST[$value])) {
-					
-					$error_list[] = $value;
-					
-				}
-
-			} elseif ($value === 'lot-category') {
-
-				if (!array_key_exists(($_POST[$value] - 1),$categories_list)) {
-					$error_list[] = $value;
-				}
-
-			} elseif ($value === 'lot-date') {
-
-				if ($_POST[$value] !== date('d.m.Y',strtotime($_POST[$value]))) {
-					$error_list[] = $value;
-				}
-			}; 
-		};
-
-		$file_info = finfo_open(FILEINFO_MIME_TYPE);
-		$file_name = $_FILES['lot-photo']['tmp_name'];
-
-		if ($file_name) {
-
-			$valid_img_types = ['image/jpeg','image/png'];
-			$file_type = finfo_file($file_info, $file_name);
-
-			if (!in_array($file_type, $valid_img_types)) {
+		if (!in_array('lot-rate', $error_list)) {
+			
+			if (!is_numeric($_POST['lot-rate']) || $_POST['lot-rate'] < 0) {
 				
-				$error_list[] = 'lot-photo';
+				$error_list[] = 'lot-rate';
 			}
+		}
 
-		} else {
+		if (!in_array('lot-step',$error_list)) {
+			
+			if (!is_numeric($_POST['lot-step']) || (int)$_POST['lot-step'] < 0) {
+				
+				$error_list[] = 'lot-step';
+			}
+		}
 
+		if (!in_array('lot-category', $error_list) && !get_category_by_id($_POST['lot-category'], $categories_list)) {
+			
+			$error_list[] = 'lot-category';
+		}
+
+		if (!in_array('lot-date', $error_list)) {
+			
+			if ($_POST['lot-date'] !== date('d.m.Y',strtotime($_POST['lot-date'])) || !((strtotime($_POST['lot-date']) - strtotime('now')) >= 86400)) {
+					
+				$error_list[] = 'lot-date';
+			}
+		}
+		
+		$file = $_FILES['lot-photo']['tmp_name'];
+		
+		if (empty($file) || !check_filetype($file)) {
+			
 			$error_list[] = 'lot-photo';
+		}
 
-		};
 		if (empty($error_list)) {
-	
-			$prefix = 'lotImg';
-			$file_name = uniqid($prefix);
-			$file_path = __DIR__ . '/img/';
-
-			move_uploaded_file($_FILES['lot-photo']['tmp_name'], $file_path . $file_name);
-
-			$file_url = 'img/' . $file_name;
 			
-			$now = date('Y-m-d H:i:s', strtotime('now'));
-			
-			$stamp = strtotime($_POST['lot-date']);
-
-			$expire_date = date("Y-m-d", $stamp);
 
 			$lot_data = [
 				'start_price' => $_POST['lot-rate'],
 				'name' => $_POST['lot-name'],
-				'img_url' => $file_url,
-				'bet_step' => $_POST['lot-step'],
+				'img_url' => save_file($file, 'lot_img'),
+				'bet_step' => (int)$_POST['lot-step'],
 				'category_id' => $_POST['lot-category'],
 				'author_id' => $_SESSION['user']['id'],
 				'description' => $_POST['lot-message'],
-				'expire_date' => $expire_date,
-				'create_date' => $now
+				'expire_date' => date("Y-m-d", strtotime($_POST['lot-date'])),
+				'create_date' => date('Y-m-d H:i:s', strtotime('now'))
 			];
 
 			$lot_id = insert_data($con, 'lot', $lot_data);
-			
+
             header('Location: /lot.php?id=' . $lot_id);
-
-		} else {
-
-			$form_data = [
-				'errors' => $error_list,
-				'categories' => $categories_list
-			];
-
-			$content = renderTemplate('templates/add.php', $form_data);
-
-			$layout_data = [
-				'title' => 'Добавление лота',
-				'categories' => $categories_list,
-				'content' => $content
-			];
 		}
-	} else {
-
-		$form_data = [
-			'errors' => $error_list,
-			'categories' => $categories_list
-		];
-
-		$content = renderTemplate('templates/add.php', $form_data);
-
-		$layout_data = [
-			'title' => 'Добавление лота',
-			'categories' => $categories_list,
-			'content' => $content
-		];
 	}
 
-	print(renderTemplate('templates/layout.php', $layout_data));
+	$form_data = [
+		'errors' => $error_list,
+		'categories' => $categories_list
+	];
 
+	$content = renderTemplate('templates/add.php', $form_data);
+
+	$layout_data = [
+		'title' => 'Добавление лота',
+		'categories' => $categories_list,
+		'content' => $content
+	];
+
+	print(renderTemplate('templates/layout.php', $layout_data));
+	print(count($error_list));
+	print(save_file($file, 'lot_img'));
+	print($error_list[0]);
+	
 } else {
 
     header($_SERVER["SERVER_PROTOCOL"]." 403 Forbidden");
 	print('403');
 
 };
+
+
 ?>

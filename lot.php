@@ -26,13 +26,7 @@ $selected_lot = select_data($con, $lotQuery, ['lot.id' => $id])[0];
 
 $lot_category_id = (int)$selected_lot['category_id'];
 
-$lotCatQuery = 'SELECT
-	name,
-	cssClass
-FROM category
-WHERE category.id = ?;';
-
-$selected_lot_category = select_data($con, $lotCatQuery, ['category.id' => $lot_category_id])[0];
+$selected_lot_category = get_category_by_id($lot_category_id, $categories_list)[0];
 
 $betsQuery = 'SELECT
     user.name as user_name,
@@ -54,8 +48,11 @@ if ($selected_lot) {
 	
 	foreach ($selected_bet as $key => $value) {
 
-		if($value['user_id'] === $_SESSION['user']['id']) $errors[] = 'bet-done';
+		if($value['user_id'] === $_SESSION['user']['id']) {
 		
+			$errors[] = 'bet-done';
+		
+		}
 		if(!empty($selected_bet[0]['bet_cost'])) {
 			
 			$price = $selected_bet[0]['bet_cost'];
@@ -111,11 +108,8 @@ if ($selected_lot) {
 
 } else {
 
-	if($_GET['id'] != null) {
+	header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
+	print('404');
 
-		header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
-		print('404');
-
-	};
 };
 ?>
