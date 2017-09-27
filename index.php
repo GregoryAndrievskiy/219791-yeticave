@@ -1,7 +1,8 @@
 <?php
-session_start();
 
 require_once 'init.php';
+
+require_once 'getwinner.php';
 
 $lot_count_sql = 'SELECT * FROM lot WHERE expire_date > NOW();';
 $lot_count = count(select_data($con, $lot_count_sql));
@@ -35,10 +36,12 @@ $content = renderTemplate('templates/index.php', [
 $layout_data = [
     'title' => 'Главная',
 	'is_index' => true,
-    'categories' => $select_data_categories,
+    'categories' => $categories_list,
 	'pagination' => $pagination,
 	'content' => $content
 ];
 
 print(renderTemplate('templates/layout.php', $layout_data));
+
+print($letter);
 ?>

@@ -7,7 +7,7 @@
 ?>
 <div class="container">
 	<section class="lots">
-	  <h2>Все лоты в категории <span>«<?=$categories[$id - 1]['name'];?>»</span></h2>
+	  <h2>Все лоты в категории <span><?=get_category_by_id($id,$categories);?>»</span></h2>
 	  <ul class="lots__list">
 		<? foreach ($lot as $key => $value) : ?>
 			<li class="lots__item lot">

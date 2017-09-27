@@ -1,7 +1,5 @@
 <?php
 
-date_default_timezone_set('Europe/Moscow');
-
 function timeManagement($timeStamp) {
 
 	$passedTime = time() - strtotime($timeStamp);
@@ -56,19 +54,38 @@ function renderTemplate($templatePath, $templateData) {
     return '';
 };
 
-function searchUserByEmail($email, $users) {
-
-	$result = null;
-
-	foreach ($users as $user) {
-
-		if ($user['email'] == $email) {
-
-			$result = $user;
-			break;
-		}
+/**
+ * Поиск пользователя с заданным почтовым адресом
+ *
+ * @param $con соединение с бд
+ * @param string $email искомый почтовый адрес
+ *
+ * @return array с данными пользователя иди bool false если пользователь не найден
+ */
+function search_user_by_email($con, $email) {
+	
+	$userQuery = 'SELECT 
+		id,
+		name, 
+		email, 
+		avatar_url, 
+		password 
+	FROM user 
+	WHERE email = ?';
+	
+	$select_data_user = select_data($con, $userQuery, ['email' => $email])[0];
+	
+	if ($select_data_user) {
+		return [
+			'id' => $select_data_user['id'],
+			'email' => $select_data_user['email'],
+			'password' => $select_data_user['password'],
+			'name' => $select_data_user['name'],
+			'avatar_url' => $select_data_user['avatar_url']
+		];
+	
 	}
-	return $result;
+	return false;
 };
 
 function select_data($con, $query, $data = []) {
@@ -97,9 +114,8 @@ function insert_data($con, $table, $data = []) {
     $keys = [];
     $values = [];
 	$count = [];
-
+	
     foreach ($data as $key => $value) {
-
         $keys[] = $key;
         $values[] = $value;
 		$count[] = '?';
@@ -156,7 +172,7 @@ function get_offset($current_page,$items_per_page)
 	}
 	
 	return $offset;
-}
+};
 
 /**
 * Возвращает массив для построения пагинации
@@ -176,5 +192,139 @@ function get_pagination_range($items_per_page,$items_count)
 
 	$pages = range(1, $page_count);
 	return $pages;
-}
+};
+
+/**
+ * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
+ *
+ * @param $link mysqli Ресурс соединения
+ * @param $sql string SQL запрос с плейсхолдерами вместо значений
+ * @param array $data Данные для вставки на место плейсхолдеров
+ *
+ * @return mysqli_stmt Подготовленное выражение
+ */
+function db_get_prepare_stmt($link, $sql, $data = []) {
+    $stmt = mysqli_prepare($link, $sql);
+
+    if ($data) {
+        $types = '';
+        $stmt_data = [];
+
+        foreach ($data as $value) {
+            $type = null;
+
+            if (is_int($value)) {
+                $type = 'i';
+            }
+            else if (is_string($value)) {
+                $type = 's';
+            }
+            else if (is_double($value)) {
+                $type = 'd';
+            }
+
+            if ($type) {
+                $types .= $type;
+                $stmt_data[] = $value;
+            }
+        }
+
+        $values = array_merge([$stmt, $types], $stmt_data);
+
+        $func = 'mysqli_stmt_bind_param';
+        $func(...$values);
+    }
+
+    return $stmt;
+};
+
+/**
+ * Проверка на файл изображения
+ *
+ * @param $img Файл из массива $_FILES
+ *
+ * @return bool
+ */
+function check_filetype($img) {
+	
+	if ($img) {
+
+		$valid_img_types = ['image/png', 'image/jpeg'];
+		$file_type = mime_content_type($img);
+	
+		foreach ($valid_img_types as $key) {
+			
+			if ($file_type === $key) {
+				
+				return true;
+			}
+		}
+	}
+	return false;
+};
+/**
+ * Переименовывает и сохраняет файл в указануюю папку 
+ *
+ * @param $img Файл из массива $_FILES
+ * @param string $prefix - префик для нового названия файла
+ *
+ * @return путь до сохраненного файла
+ */
+function save_file($img, $prefix) {
+
+	$file_name = uniqid($prefix);
+	$file_path = __DIR__ . '/img/';
+	move_uploaded_file($img , $file_path . $file_name);
+	return 'img/' . $file_name;
+
+};
+/**
+ * Проверка заполнения обязательных полей в форме
+ *
+ * @param array $fields массив со значениями
+ * @param array $requried - массив с обязательными для заполнения полями
+ *
+ * @return array полей из $required которые не были заполнены
+ */
+function get_empty_required($fields, $requried) {
+	
+	$empty_fields = [];
+
+	foreach ($requried as $key => $value) {
+		
+		if (!$fields[$value]) {
+			
+			$empty_fields[] = $value;
+		}
+	}
+	return $empty_fields;
+};
+
+/**
+ * Проверка заполнения обязательных полей в форме
+ *
+ * @param string $id идентификатор категории
+ * @param array $categories_list  - список категорий
+ *
+ * @return array с совпашей категорией или bool false
+ */
+function get_category_by_id($id, $categories_list) {
+	
+	$category = [];
+
+	foreach ($categories_list as $key => $value) {
+		
+		if ($value['id'] == $id) {
+			
+			$category[] = $value;
+		}
+	}
+
+	if (!empty($category)) {
+		
+		return $category;
+	
+	} 
+	return false;
+};
 ?>

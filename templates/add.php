@@ -20,7 +20,7 @@ $default_error_class = 'form__item--invalid';
 	<select id="category" name="lot-category" required>
 		<option value='' <?=empty($errors) ? 'selected' : ''?>>Выберите категорию</option>
 		<? foreach ($categories as $key => $value) : ?>
-			<option value="<?=$value['id'];?>" <?=($_POST['lot-category'] == $value['id'] && !empty($errors)) ? 'selected' : ''?>><?=$value['name'];?></option>
+			<option value="<?=$value['id'];?>" <?=($_POST['lot-category'] == $value['id'] ) ? 'selected' : ''?>><?=$value['name'];?></option>
 		<? endforeach ?>
 	</select>
 	<span class="form__error"><?=in_array('lot-category',$errors) ? $default_error_text : ''?></span>

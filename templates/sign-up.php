@@ -3,7 +3,6 @@
 	$errors = $templateData['errors'];
 	$default_error_class = 'form__item--invalid';
 	$default_error_text = 'Заполните это поле';
-	$categories = $templateData['categories'];
 
 ?>
 <form class="form container <?=count($errors) ? 'form--invalid' : ''?>" action="sign-up.php" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
