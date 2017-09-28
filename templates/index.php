@@ -29,7 +29,7 @@
 						<span class="lot__cost"><?=htmlspecialchars($value['start_price']); ?><b class="rub">р</b></span>
 					</div>
 					<div class="lot__timer timer">
-						<?=(strtotime($value['expire_date']) > strtotime('now')) ? htmlspecialchars(timeRemaining($value['expire_date'])) : print('завершен');?>
+						<?=(strtotime($value['expire_date']) > strtotime('now')) ? htmlspecialchars(timeRemaining($value['expire_date'])) : 'завершен';?>
 					</div>
 				</div>
 			</div>

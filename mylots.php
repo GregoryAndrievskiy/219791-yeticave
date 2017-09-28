@@ -10,28 +10,24 @@ if (isset($_SESSION['user'])) {
 	$user_id = (int)$_SESSION['user']['id'];
 
     $query = 'SELECT 
-			lot.id, 
-			lot.img_url, 
-			lot.name, 
-			bet.bet_date, 
-			bet.cost, 
-			lot.expire_date, 
-			lot.winner_id,
-			user.contacts AS contacts,
-			category.name AS category  
-		FROM bet 
-        JOIN user ON bet.user_id = user.id
-		JOIN lot ON bet.lot_id = lot.id 
-		JOIN category ON lot.category_id = category.id 
-		WHERE bet.user_id = ?;';
+		lot.id, 
+		lot.name, 
+		lot.img_url, 
+		lot.expire_date, 
+		lot.winner_id, 
+		bet.cost, 
+		bet.bet_date, 
+		category.name AS category, 
+		user.contacts 
+	FROM bet 
+	INNER JOIN lot ON bet.lot_id = lot.id
+	INNER JOIN user ON lot.author_id = user.id
+	INNER JOIN category ON lot.category_id = category.id
+	WHERE bet.cost IN (SELECT MAX(cost) FROM bet WHERE user_id= ? GROUP BY lot_id)';
 
     $bets = select_data($con, $query, ['bet.user_id' => $user_id]);
 
-} else {
-
-    $bets = [];
-
-};
+}
 
 $bets_data = [
 	'bets' => $bets

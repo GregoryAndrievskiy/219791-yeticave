@@ -30,6 +30,7 @@ $pagination = renderTemplate('templates/pagination.php', [
 ]);
 
 $content = renderTemplate('templates/index.php', [
+	'categories' => $categories_list,
 	'lots' => $lots
 ]);
 
