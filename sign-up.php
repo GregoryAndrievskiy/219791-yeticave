@@ -50,7 +50,9 @@ if (!empty($_POST)) {
 }
 
 $sign_up_data = [
-	'errors' => $error_list
+	'errors' => $error_list,
+	'default_error_class' => 'form__item--invalid',
+	'default_error_text' => 'Заполните это поле'
 ];
 
 $content = renderTemplate('templates/sign-up.php', $sign_up_data);

@@ -19,16 +19,21 @@ $query = 'SELECT
 	WHERE lot_id= ?
 	ORDER BY bet.id DESC
 	LIMIT 1 OFFSET 0';
+	
+$updateWinnerQuery = 'UPDATE lot SET winner_id = ? WHERE lot.id = ?';
 
 if ($lots_without_winner) {
-	
-    $updateWinnerQuery = 'UPDATE lot SET winner_id = ? WHERE lot.id = ?';
-	
+
     foreach ($lots_without_winner as $key) {
 		
         $temp = select_data($con, $query, [$key['id']]);
-        exec_query($con, $updateWinnerQuery, [$temp[0]['user_id'], $key['id']]);
-        $winners[] = $temp[0];
+		
+		if ($temp) {
+			
+			extract($temp[0], EXTR_SKIP);
+			exec_query($con, $updateWinnerQuery, [$temp[0]['user_id'], $key['id']]);
+			$winners[] = $temp[0];
+        }
     }
 }
 

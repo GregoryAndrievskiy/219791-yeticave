@@ -12,7 +12,7 @@ function timeManagement($timeStamp) {
 
 	$passedTime = time() - strtotime($timeStamp);
 	$hours = floor($passedTime / 3600);
-	$time;
+	$time = '';
 	if ($hours >= 24) {
 
 		$time = date("d.m.y в H:i", strtotime($timeStamp));
@@ -39,7 +39,7 @@ function timeManagement($timeStamp) {
 
 function timeRemaining($expire) {
 	
-	$expire_time;
+	$expire_time = '';
 	$remainingTime = strtotime($expire) - time();
 	$days = floor($remainingTime / 3600 / 24);
 	$hours = floor($remainingTime % (3600 * 24) / 3600);
@@ -68,15 +68,17 @@ function timeRemaining($expire) {
 
 function renderTemplate($templatePath, $templateData) {
 	
+	$html = '';
+	
     if(file_exists($templatePath)) {
 
         ob_start();
+		extract($templateData, EXTR_SKIP);
         require $templatePath;
         $html = ob_get_clean();
-        return $html;
 
     }
-    return '';
+    return $html;
 };
 
 /**
@@ -89,6 +91,8 @@ function renderTemplate($templatePath, $templateData) {
  */
 function search_user_by_email($con, $email) {
 	
+	$user_array = false;
+	
 	$userQuery = 'SELECT 
 		id,
 		name, 
@@ -98,19 +102,23 @@ function search_user_by_email($con, $email) {
 	FROM user 
 	WHERE email = ?';
 	
-	$select_data_user = select_data($con, $userQuery, ['email' => $email])[0];
+	$select_data_user = select_data($con, $userQuery, ['email' => $email]);
 	
 	if ($select_data_user) {
-		return [
+		
+		$select_data_user = $select_data_user[0];
+		
+		$user_array = [
 			'id' => $select_data_user['id'],
 			'email' => $select_data_user['email'],
 			'password' => $select_data_user['password'],
 			'name' => $select_data_user['name'],
 			'avatar_url' => $select_data_user['avatar_url']
 		];
+		extract($user_array, EXTR_SKIP);
 	
 	}
-	return false;
+	return $user_array;
 };
 
 /**
@@ -156,6 +164,8 @@ function select_data($con, $query, $data = []) {
  */
 
 function insert_data($con, $table, $data = []) {
+	
+	$insert_id = false;
 
     $keys = [];
     $values = [];
@@ -180,10 +190,10 @@ function insert_data($con, $table, $data = []) {
 
 		if($exe) {
 
-			return mysqli_stmt_insert_id($stmt);
+			$insert_id = mysqli_stmt_insert_id($stmt);
 		}
     }
-	return false;
+	return $insert_id;
 };
 
 /**
@@ -192,11 +202,14 @@ function insert_data($con, $table, $data = []) {
  * @param $con ресурс соединения
  * @param $query SQL-запрос
  * @param array $data Передаваемые значения
+ *
  * @return bool
  *
  */
 
 function exec_query($con, $query, $data = []) {
+	
+	$result = false;
 
     $stmt = db_get_prepare_stmt($con, $query, $data);
 
@@ -206,44 +219,53 @@ function exec_query($con, $query, $data = []) {
 
 		if($exe) {
 
-			return true;
+			$result = true;
 		}
     }
     return $result;
 };
 
 /**
-* Вычисляет параметр OFFSET для SQL запроса
-*
-* @param integer $current_page - текущая страница
-* @param integer $items_per_page - количество элементов на странице
-* @return integer
-*/
-function get_offset($current_page,$items_per_page)
-{
+ * Вычисляет параметр OFFSET для SQL запроса
+ *
+ * @param integer $current_page - текущая страница
+ * @param integer $items_per_page - количество элементов на странице
+ *
+ * @return integer
+ */
+function get_offset($current_page, $items_per_page) {
+	
+	$offset = 0;
+	
 	if (is_numeric($current_page)) {
+		
 		$offset = (intval($current_page) - 1) * $items_per_page;
+	
 	} else {
+		
 		$offset = 0;
 	}
-	
 	return $offset;
 };
 
 /**
-* Возвращает массив для построения пагинации
-* 
-* @param integer $items_per_page - количество элементов на странице
-* @param integer $items_count - общее количество
-* @return array
-*/
-function get_pagination_range($items_per_page,$items_count)
-{
+ * Возвращает массив для построения пагинации
+ * 
+ * @param integer $items_per_page - количество элементов на странице
+ * @param integer $items_count - общее количество
+ *
+ * @return array
+ */
+function get_pagination_range($items_per_page,$items_count) {
 
 	if ($items_count > 0) {
+		
 		$page_count = ceil($items_count / $items_per_page);
+		
 	} else {
+		
 		$page_count = 1;
+		
 	}
 
 	$pages = range(1, $page_count);
@@ -263,6 +285,7 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
     $stmt = mysqli_prepare($link, $sql);
 
     if ($data) {
+		
         $types = '';
         $stmt_data = [];
 
@@ -303,6 +326,8 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
  */
 function check_filetype($img) {
 	
+	$is_type_correct = false;
+	
 	if ($img) {
 
 		$valid_img_types = ['image/png', 'image/jpeg'];
@@ -312,11 +337,11 @@ function check_filetype($img) {
 			
 			if ($file_type === $key) {
 				
-				return true;
+				$is_type_correct = true;
 			}
 		}
 	}
-	return false;
+	return $is_type_correct;
 };
 /**
  * Переименовывает и сохраняет файл в указануюю папку 
@@ -366,7 +391,7 @@ function get_empty_required($fields, $requried) {
  */
 function get_category_by_id($id, $categories_list) {
 	
-	$category = [];
+	$category = false;
 
 	foreach ($categories_list as $key => $value) {
 		
@@ -375,12 +400,6 @@ function get_category_by_id($id, $categories_list) {
 			$category[] = $value;
 		}
 	}
-
-	if (!empty($category)) {
-		
-		return $category;
-	
-	} 
-	return false;
+	return $category;
 };
 ?>

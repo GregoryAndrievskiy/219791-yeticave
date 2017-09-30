@@ -4,9 +4,15 @@ require_once 'init.php';
 
 $lot_count = 0;
 
-$lots_per_page = 3;
+$lots_per_page = 9;
 
-$offset = get_offset($_GET['page'],$lots_per_page);
+$offset = 0; 
+
+if (!empty($_GET['page'])) { 
+
+	$offset = get_offset($_GET['page'],$lots_per_page); 
+
+} 
 
 $search = [];
 
@@ -19,11 +25,18 @@ if (isset($_GET['search'])) {
     $search = mysqli_real_escape_string($con, $search );
 	
 	$searchQuery = 'SELECT
-		* FROM lot 
+			lot.id,
+			lot.name AS lot_name,
+			lot.expire_date,
+			lot.img_url,
+			lot.start_price,
+			category.name AS category_name
+		FROM lot 
 		JOIN category ON category_id = category.id 
-		WHERE lot.name LIKE ? OR description LIKE ?';
+		WHERE lot.name LIKE ? OR description LIKE ?
+		LIMIT ? OFFSET ?';
 	
-    $search_lot = select_data($con, $searchQuery, [$search, $search]);
+    $search_lot = select_data($con, $searchQuery, ['%'.$search.'%', '%'.$search.'%', $lots_per_page, $offset]);
 
 	$lot_count = count($search_lot);
 };

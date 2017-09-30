@@ -70,7 +70,11 @@ if (isset($_SESSION['user'])) {
 
 	$form_data = [
 		'errors' => $error_list,
-		'categories' => $categories_list
+		'categories' => $categories_list,
+		'default_error_text' => 'Заполните это поле',
+		'numeric_error_text' => 'Введите число',
+		'default_error_class' => 'form__item--invalid'
+		
 	];
 
 	$content = renderTemplate('templates/add.php', $form_data);
@@ -82,9 +86,6 @@ if (isset($_SESSION['user'])) {
 	];
 
 	print(renderTemplate('templates/layout.php', $layout_data));
-	print(count($error_list));
-	print(save_file($file, 'lot_img'));
-	print($error_list[0]);
 	
 } else {
 
@@ -93,5 +94,6 @@ if (isset($_SESSION['user'])) {
 
 };
 
+var_dump($_POST);
 
 ?>

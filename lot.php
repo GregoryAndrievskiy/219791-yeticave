@@ -43,7 +43,6 @@ $selected_bet = select_data($con, $betsQuery, ['bet.lot_id' => $id]);
 if ($selected_lot) {
 	
 	$errors = [];
-	$bet = $_POST['cost'];
 	$price = $selected_lot['start_price'];
 	
 	foreach ($selected_bet as $key => $value) {
@@ -60,7 +59,9 @@ if ($selected_lot) {
 		}
 	}
 	
-	if (!empty($bet)) {
+	if (!empty($_POST['cost'])) {
+		
+		$bet = $_POST['cost'];
 
 		if ($bet < ($price + $selected_lot['bet_step'])) {
 
@@ -93,6 +94,7 @@ if ($selected_lot) {
 		'author_id' => $selected_lot['author_id'],
 		'bet_step' => $selected_lot['bet_step'],
 		'bets' => $selected_bet,
+		'default_error_class' => 'form__item--invalid',
 		'errors' => $errors
 	];
 

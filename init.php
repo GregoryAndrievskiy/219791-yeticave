@@ -4,6 +4,8 @@ session_start();
 
 date_default_timezone_set('Europe/Moscow');
 
+error_reporting(E_ALL);
+
 require_once 'functions.php';
 
 require_once 'vendor/autoload.php';

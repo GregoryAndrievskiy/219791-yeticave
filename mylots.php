@@ -30,7 +30,8 @@ if (isset($_SESSION['user'])) {
 }
 
 $bets_data = [
-	'bets' => $bets
+	'bets' => $bets,
+	'id' => $_SESSION['user']['id']
 ];
 
 $content = renderTemplate('templates/mylots.php', $bets_data );

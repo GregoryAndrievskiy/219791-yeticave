@@ -7,15 +7,22 @@ require_once 'getwinner.php';
 $lot_count_sql = 'SELECT * FROM lot WHERE expire_date > NOW();';
 $lot_count = count(select_data($con, $lot_count_sql));
 
-$lots_per_page = 3;
-$offset = get_offset($_GET['page'],$lots_per_page);
+$lots_per_page = 9;
+
+$offset = 0; 
+
+if (!empty($_GET['page'])) { 
+
+$offset = get_offset($_GET['page'],$lots_per_page); 
+
+} 
 
 $lots_sql = 'SELECT 
 	lot.id, 
 	lot.name, 
 	lot.start_price, 
 	lot.img_url,
-	category.name AS cat,
+	category.name AS category,
 	lot.expire_date
 FROM lot 
 LEFT JOIN category ON category.id = lot.category_id 
@@ -43,6 +50,4 @@ $layout_data = [
 ];
 
 print(renderTemplate('templates/layout.php', $layout_data));
-
-print($letter);
 ?>

@@ -31,7 +31,8 @@ if (!empty($_POST)) {
 }
 
 $login_data = [
-	'errors' => $error_list
+	'errors' => $error_list,
+	'error_class' => 'form__item--invalid'
 ];
 
 $content = renderTemplate('templates/login.php', $login_data );

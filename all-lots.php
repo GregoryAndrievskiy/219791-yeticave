@@ -9,15 +9,22 @@ if ($category_id) {
 	$lot_count_sql = 'SELECT COUNT(*) as count FROM lot WHERE lot.category_id = ?;';
 	$lot_count = select_data($con, $lot_count_sql, ['lot.category_id' => $category_id])[0]['count'];
 
-	$lots_per_page = 3;
-	$offset = get_offset($_GET['page'],$lots_per_page);
+	$lots_per_page = 9;
+
+	$offset = 0; 
+
+	if (!empty($_GET['page'])) { 
+
+		$offset = get_offset($_GET['page'],$lots_per_page); 
+
+	} 
 
 	$lots_sql = 'SELECT 
 		lot.id, 
 		lot.name, 
 		lot.start_price, 
 		lot.img_url,
-		category.name AS cat,
+		category.name AS category,
 		lot.expire_date
 	FROM lot 
 	LEFT JOIN category ON category.id = lot.category_id 
@@ -49,6 +56,7 @@ if ($category_id) {
 	print(renderTemplate('templates/layout.php', $layout_data));
 
 } else {
+
 	header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
 	print('404');
 }

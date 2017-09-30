@@ -1,19 +1,8 @@
-﻿<?php
-
-	$id = (int)$_GET['category'];
-    $page_title = $templateData['title'];
-    $user_avatar = 'img/user.jpg';
-    $page_content = $templateData['content'];
-	$categories = $templateData['categories'];
-	$isIndexPage = $templateData['is_index'];
-	$pagination = $templateData['pagination'];
-
-?>
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title><?=$page_title; ?></title>
+    <title><?=$templateData['title']; ?></title>
     <link href="css/normalize.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 </head>
@@ -32,7 +21,7 @@
         <nav class="user-menu">
 			<? if(isset($_SESSION['user'])): ?>
 				<div class="user-menu__image">
-					<a href="mylots.php"><img src="<?=!empty($_SESSION['user']['avatar-url']) ? $_SESSION['user']['avatar-url'] : 'img/avatar.jpg'?>" width="40" height="40" alt="Пользователь"></a>
+					<a href="mylots.php"><img src="<?=!empty($_SESSION['user']['avatar_url']) ? $_SESSION['user']['avatar_url'] : 'img/avatar.jpg'?>" width="40" height="40" alt="Пользователь"></a>
 				</div>
 				<div class="user-menu__logged">
 					<p><?=htmlspecialchars($_SESSION['user']['name']); ?></p>
@@ -51,13 +40,13 @@
         </nav>
     </div>
 </header>
-<main <?=($isIndexPage) ? 'class="container"' : ''?>>
-	<? if($isIndexPage): ?>
+<main <?=(in_array('is_index', $templateData)) ? 'class="container"' : ''?>>
+	<? if(in_array('is_index', $templateData)): ?>
 		<section class="promo">
 			<h2 class="promo__title">Нужен стафф для катки?</h2>
 			<p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
 			<ul class="promo__list">
-				<? foreach ($categories as $key => $value) : ?>
+				<? foreach ($templateData['categories'] as $key => $value) : ?>
 					<li class="promo__item <?=htmlspecialchars($value['cssClass']); ?>">
 						<a class="promo__link" href="all-lots.php?category=<?= $value['id']; ?>"><?=htmlspecialchars($value['name']); ?></a>
 					</li>
@@ -67,22 +56,22 @@
 	<? else: ?>
 		<nav class="nav">
 			<ul class="nav__list container ">
-				<? foreach ($categories as $key => $value) : ?>
-					<li class="nav__item <?= ($key == $id - 1) ? 'nav__item--current' : '' ;?>">
+				<? foreach ($templateData['categories'] as $key => $value) : ?>
+					<li class="nav__item <?= ($key == $_GET['category'] - 1) ? 'nav__item--current' : '' ;?>">
 						<a href="all-lots.php?category=<?= $value['id']; ?>"><?=$value['name'];?></a>
 					</li>
 				<? endforeach ?>
 			</ul>
 		</nav>
 	<? endif; ?>
-	<?php print($page_content); ?>
-	<?php if($pagination) print($pagination); ?>
+	<?php print($templateData['content']); ?>
+	<?php if(in_array('pagination', $templateData)) print($templateData['pagination']); ?>
 </main>
 <footer class="main-footer">
     <nav class="nav">
         <ul class="nav__list container">
-			<? foreach ($categories as $key => $value) : ?>
-				<li class="nav__item <?= ($key == $id - 1) ? 'nav__item--current' : '' ;?>">
+			<? foreach ($templateData['categories'] as $key => $value) : ?>
+				<li class="nav__item <?= ($key == $_GET['category'] - 1) ? 'nav__item--current' : '' ;?>">
 					<a href="all-lots.php?category=<?= $value['id']; ?>"><?=htmlspecialchars($value['name']); ?></a>
 				</li>
 			<? endforeach; ?>

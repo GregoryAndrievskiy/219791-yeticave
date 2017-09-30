@@ -1,20 +1,15 @@
-﻿<?php
-
-	$lot = $templateData['lots'];
-
-?>
-<div class="container">
+﻿<div class="container">
 	<section class="lots">
-		<h2>Результаты поиска по запросу «<span>Union</span>»</h2>
+		<h2>Результаты поиска по запросу «<span><?=$_GET['search'];?></span>»</h2>
 		<ul class="lots__list">
-		<? foreach ($lot as $key => $value) : ?>
+		<? foreach ($templateData['lots'] as $key => $value) : ?>
 			<li class="lots__item lot">
 				<div class="lot__image">
-					<img src="<?=$value['img_url']; ?>" width="350" height="260" alt="<?=htmlspecialchars($value['cat']); ?>">
+					<img src="<?=$value['img_url']; ?>" width="350" height="260" alt="<?=htmlspecialchars($value['lot_name']); ?>">
 				</div>
 				<div class="lot__info">
-					<span class="lot__category"><?=htmlspecialchars($value['cat']); ?></span>
-					<h3 class="lot__title"><a class="text-link" href="lot.php?id=<?=$value[id]?>"><?=htmlspecialchars($value['name']); ?></a></h3>
+					<span class="lot__category"><?=htmlspecialchars($value['category_name']); ?></span>
+					<h3 class="lot__title"><a class="text-link" href="lot.php?id=<?=$value['id']?>"><?=htmlspecialchars($value['lot_name']); ?></a></h3>
 					<div class="lot__state">
 						<div class="lot__rate">
 							<span class="lot__amount">Стартовая цена</span>
@@ -29,5 +24,5 @@
 		<? endforeach; ?>
 		</ul>
 	</section>
-	<?php if($pagination) print($pagination); ?>
+	<?=$templateData['pagination'] ? print($templateData['pagination']) : ''; ?>
 </div>
