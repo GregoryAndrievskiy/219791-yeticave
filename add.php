@@ -4,6 +4,7 @@ require_once 'init.php';
 
 $valid_list = ['lot-name', 'lot-category', 'lot-message', 'lot-rate', 'lot-step', 'lot-date'];
 $error_list = [];
+$selected_cat = '';
 
 if (isset($_SESSION['user'])) {
 
@@ -30,6 +31,11 @@ if (isset($_SESSION['user'])) {
 		if (!in_array('lot-category', $error_list) && !get_category_by_id($_POST['lot-category'], $categories_list)) {
 			
 			$error_list[] = 'lot-category';
+			$selected_cat = '';
+		
+		} else {
+			
+			$selected_cat = $_POST['lot-category'];
 		}
 
 		if (!in_array('lot-date', $error_list)) {
@@ -70,6 +76,7 @@ if (isset($_SESSION['user'])) {
 
 	$form_data = [
 		'errors' => $error_list,
+		'selected_cat' => $selected_cat,
 		'categories' => $categories_list,
 		'default_error_text' => 'Заполните это поле',
 		'numeric_error_text' => 'Введите число',
@@ -93,4 +100,7 @@ if (isset($_SESSION['user'])) {
 	print('403');
 
 };
+
+var_dump($_POST['lot-category']);
+var_dump($categories_list);
 ?>

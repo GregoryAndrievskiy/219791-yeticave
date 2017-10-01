@@ -4,7 +4,12 @@ require_once 'init.php';
 
 $id = (int)$_GET['id'];
 
-$session_user = $_SESSION['user']['id'];
+$session_user = '';
+
+if(isset($_SESSION['user'])) {
+	
+	$session_user = $_SESSION['user']['id'];
+}
 
 $lotQuery = 'SELECT
 	lot.id,

@@ -9,9 +9,11 @@
 	  <div class="form__item <?=in_array('lot-category',$templateData['errors']) ? $templateData['default_error_class'] : ''?>">
 		<label for="category">Категория</label>
 		<select id="category" name="lot-category" required>
-			<option value='' <?=empty($templateData['errors']) ? 'selected' : ''?>>Выберите категорию</option>
+			<option value="" ?>Выберите категорию</option>
 			<? foreach ($templateData['categories'] as $key => $value) : ?>
-				<option value="<?=$value['id'];?>"<?=in_array('lot-category', $_POST) ? (($_POST['lot-category'] == $value['id']) ? 'selected' : '') : ''?>><?=$value['name'];?></option>
+				<option value="<?=$value['id'];?>" <?=($templateData['selected_cat'] == $value['id']) ? 'selected' : ''?>>
+					<?=$value['name'];?>
+				</option>
 			<? endforeach ?>
 		</select>
 		<span class="form__error"><?=in_array('lot-category',$templateData['errors']) ? $templateData['default_error_text'] : ''?></span>
