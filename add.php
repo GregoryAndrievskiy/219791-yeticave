@@ -73,8 +73,8 @@ if (isset($_SESSION['user'])) {
 		'categories' => $categories_list,
 		'default_error_text' => 'Заполните это поле',
 		'numeric_error_text' => 'Введите число',
+		'file_error_text' => 'Загрузите файл изображения',
 		'default_error_class' => 'form__item--invalid'
-		
 	];
 
 	$content = renderTemplate('templates/add.php', $form_data);
@@ -93,7 +93,4 @@ if (isset($_SESSION['user'])) {
 	print('403');
 
 };
-
-var_dump($_POST);
-
 ?>

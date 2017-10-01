@@ -4,6 +4,8 @@ require_once 'init.php';
 
 $id = (int)$_GET['id'];
 
+$session_user = $_SESSION['user']['id'];
+
 $lotQuery = 'SELECT
 	lot.id,
 	name,
@@ -47,7 +49,7 @@ if ($selected_lot) {
 	
 	foreach ($selected_bet as $key => $value) {
 
-		if($value['user_id'] === $_SESSION['user']['id']) {
+		if($value['user_id'] === $session_user) {
 		
 			$errors[] = 'bet-done';
 		
@@ -73,7 +75,7 @@ if ($selected_lot) {
 			$values = [
 				'bet_date' => $now,
 				'cost' => $_POST['cost'],
-				'user_id' => $_SESSION['user']['id'],
+				'user_id' => $session_user,
 				'lot_id' => $id
 			];
 			insert_data($con, 'bet', $values);
