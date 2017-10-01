@@ -100,7 +100,4 @@ if (isset($_SESSION['user'])) {
 	print('403');
 
 };
-
-var_dump($_POST['lot-category']);
-var_dump($categories_list);
 ?>
