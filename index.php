@@ -13,7 +13,7 @@ $offset = 0;
 
 if (!empty($_GET['page'])) { 
 
-$offset = get_offset($_GET['page'],$lots_per_page); 
+	$offset = get_offset($_GET['page'],$lots_per_page); 
 
 } 
 
@@ -33,8 +33,10 @@ LIMIT ? OFFSET ?';
 $lots = select_data($con, $lots_sql, [$lots_per_page, $offset]);
 
 $pagination = renderTemplate('templates/pagination.php', [
-	'range' => get_pagination_range($lots_per_page,$lot_count),
+	'range' => get_pagination_range($lots_per_page, $lot_count)
 ]);
+
+var_dump(get_pagination_range($lots_per_page, $lot_count));
 
 $content = renderTemplate('templates/index.php', [
 	'categories' => $categories_list,

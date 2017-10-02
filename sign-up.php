@@ -7,7 +7,7 @@ $error_list = [];
 
 if (!empty($_POST)) {
 
-	$error_list = get_empty_required($_POST,$valid_list);
+	$error_list = get_empty_required($_POST, $valid_list);
 
 	if (!in_array('reg-email',$error_list) ) {
 		
@@ -19,9 +19,9 @@ if (!empty($_POST)) {
 	
 	$file = $_FILES['img_url']['tmp_name'];
 	
-	if (!empty($file) && check_filetype($file)) {
+	if (empty($file) || !check_filetype($file)) {
 
-		$errors_list[] = 'img_url';
+		$error_list[] = 'img_url';
 	}
 	
 	if (empty($error_list)) {

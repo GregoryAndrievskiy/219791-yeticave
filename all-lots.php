@@ -8,17 +8,16 @@ if ($category_id) {
 
 	$lot_count_sql = 'SELECT COUNT(*) as count FROM lot WHERE lot.category_id = ?;';
 	$lot_count = select_data($con, $lot_count_sql, ['lot.category_id' => $category_id])[0]['count'];
-
-	$lots_per_page = 9;
+	
+	$lots_per_page = 3;
 
 	$offset = 0; 
 
 	if (!empty($_GET['page'])) { 
 
-		$offset = get_offset($_GET['page'],$lots_per_page); 
-
+		$offset = get_offset($_GET['page'], $lots_per_page); 
 	} 
-
+	
 	$lots_sql = 'SELECT 
 		lot.id, 
 		lot.name, 
@@ -35,24 +34,25 @@ if ($category_id) {
 	$lots = select_data($con, $lots_sql, ['lot.category_id' => $category_id, $lots_per_page, $offset]);
 
 	$pagination = renderTemplate('templates/pagination.php', [
-		'range' => get_pagination_range($lots_per_page,$lot_count),
+		'range' => get_pagination_range($lots_per_page, $lot_count),
 		'extra_params' => [
 			'category' => $category_id
 		]
 	]);
-
+	
 	$content = renderTemplate('templates/all-lots.php', [
 		'lots' => $lots, 
-		'categories' => $categories_list
+		'categories' => $categories_list,
+		'category_id' => $category_id
 	]);
 
 	$layout_data = [
-	    'title' => 'Главная',
+	    'title' => 'Все лоты',
 	    'categories' => $categories_list,
 	    'pagination' => $pagination,
 		'content' => $content
 	];
-
+	
 	print(renderTemplate('templates/layout.php', $layout_data));
 
 } else {
@@ -60,6 +60,4 @@ if ($category_id) {
 	header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
 	print('404');
 }
-
-
 ?>

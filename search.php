@@ -4,14 +4,13 @@ require_once 'init.php';
 
 $lot_count = 0;
 
-$lots_per_page = 9;
+$lots_per_page = 3;
 
 $offset = 0; 
 
 if (!empty($_GET['page'])) { 
 
-	$offset = get_offset($_GET['page'],$lots_per_page); 
-
+	$offset = get_offset($_GET['page'], $lots_per_page); 
 } 
 
 $search = [];
@@ -36,24 +35,34 @@ if (isset($_GET['search'])) {
 		WHERE lot.name LIKE ? OR description LIKE ?
 		LIMIT ? OFFSET ?';
 	
-    $search_lot = select_data($con, $searchQuery, ['%'.$search.'%', '%'.$search.'%', $lots_per_page, $offset]);
-
-	$lot_count = count($search_lot);
+    $search_lot = select_data($con, $searchQuery, ['%'. $search .'%', '%'. $search .'%', $lots_per_page, $offset]);
+	
+	$searchQueryCount = 'SELECT
+		COUNT(*) as count
+		FROM lot 
+		JOIN category ON category_id = category.id 
+		WHERE lot.name LIKE ? OR description LIKE ?';
+	
+	$search_lot_count = select_data($con, $searchQueryCount, ['%'. $search .'%', '%'. $search .'%'])[0]['count'];
+	
+	$lot_count = $search_lot_count;
 };
 
-
 $pagination = renderTemplate('templates/pagination.php', [
-	'range' => get_pagination_range($lots_per_page,$lot_count),
+	'range' => get_pagination_range($lots_per_page, $lot_count),
+	'extra_params' => [
+		'search' => $_GET['search']
+	]
 ]);
 
 $content = renderTemplate('templates/search.php', [
-	'pagination' => $pagination,
 	'lots' => $search_lot
 ]);
 
 $layout_data = [
     'title' => 'Результаты поиска',
     'categories' =>$categories_list,
+	'pagination' => $pagination,
 	'content' => $content
 ];
 

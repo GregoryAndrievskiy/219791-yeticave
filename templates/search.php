@@ -24,5 +24,4 @@
 		<? endforeach; ?>
 		</ul>
 	</section>
-	<?=$templateData['pagination'] ? print($templateData['pagination']) : ''; ?>
 </div>

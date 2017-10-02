@@ -1,6 +1,6 @@
 <?php
 
-	$current_page = $_GET['page'] ?? 1;
+$current_page = $_GET['page'] ?? 1;
 	
 $next_page = count($templateData['range']); 
 

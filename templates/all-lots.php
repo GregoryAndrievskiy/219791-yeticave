@@ -1,6 +1,6 @@
 ﻿<div class="container">
 	<section class="lots">
-	  <h2>Все лоты в категории <span>«<?=get_category_by_id($templateData['categories'], $templateData['categories'])[0]['name'];?>»</span></h2>
+	  <h2>Все лоты в категории <span>«<?=get_category_by_id($templateData['category_id'], $templateData['categories'])[0]['name'];?>»</span></h2>
 	  <ul class="lots__list">
 		<? foreach ($templateData['lots'] as $key => $value) : ?>
 			<li class="lots__item lot">

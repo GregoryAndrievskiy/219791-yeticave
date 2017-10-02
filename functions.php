@@ -256,7 +256,7 @@ function get_offset($current_page, $items_per_page) {
  *
  * @return array
  */
-function get_pagination_range($items_per_page,$items_count) {
+function get_pagination_range($items_per_page, $items_count) {
 
 	if ($items_count > 0) {
 		
