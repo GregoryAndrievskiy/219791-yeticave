@@ -9,7 +9,7 @@ if ($category_id) {
 	$lot_count_sql = 'SELECT COUNT(*) as count FROM lot WHERE lot.category_id = ?;';
 	$lot_count = select_data($con, $lot_count_sql, ['lot.category_id' => $category_id])[0]['count'];
 	
-	$lots_per_page = 3;
+	$lots_per_page = 9;
 
 	$offset = 0; 
 

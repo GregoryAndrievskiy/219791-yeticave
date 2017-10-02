@@ -4,7 +4,7 @@ require_once 'init.php';
 
 $lot_count = 0;
 
-$lots_per_page = 3;
+$lots_per_page = 9;
 
 $offset = 0; 
 
