@@ -36,8 +36,6 @@ $pagination = renderTemplate('templates/pagination.php', [
 	'range' => get_pagination_range($lots_per_page, $lot_count)
 ]);
 
-var_dump(get_pagination_range($lots_per_page, $lot_count));
-
 $content = renderTemplate('templates/index.php', [
 	'categories' => $categories_list,
 	'lots' => $lots
